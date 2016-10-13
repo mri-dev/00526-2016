@@ -1,5 +1,3 @@
 .ftpconfig
-config.*
 .DS_Store
 images/
-settings/
