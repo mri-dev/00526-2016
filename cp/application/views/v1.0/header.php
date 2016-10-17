@@ -38,47 +38,47 @@
 					}
 				}
 			});
-			
+
 			if(isSlideOut){
 				slideMenu.css({
-					'left' : '0px'	
+					'left' : '0px'
 				});
 				$('.ct').css({
-					'paddingLeft' : '220px'	
+					'paddingLeft' : '220px'
 				});
 			}else{
 				slideMenu.css({
 					'left' : '-'+closeNum+'px'
-				});			
+				});
 				$('.ct').css({
-					'paddingLeft' : '75px'	
-				});	
+					'paddingLeft' : '75px'
+				});
 			}
-			
+
 			$('.slideMenuToggle').click(function(){
 				if(isSlideOut){
 					isSlideOut = false;
 					slideMenu.animate({
-						'left' : '-'+closeNum+'px'	
-						
+						'left' : '-'+closeNum+'px'
+
 					},200);
 					$('.ct').animate({
-						'paddingLeft' : '75px'	
+						'paddingLeft' : '75px'
 					},200);
 					saveState('closed');
 				}else{
 					isSlideOut = true;
 					slideMenu.animate({
-						'left' : '0px'	
+						'left' : '0px'
 					},200);
 					$('.ct').animate({
-						'paddingLeft' : '220px'	
+						'paddingLeft' : '220px'
 					},200);
 					saveState('opened');
 				}
 			});
 		})
-		
+
 		function saveState(state){
 			if(typeof(Storage) !== "undefined") {
 				if(state == 'opened'){
@@ -88,10 +88,10 @@
 				}
 			}
 		}
-		
+
 		function getMenuState(){
 			var state =  localStorage.getItem("slideMenuOpened");
-			
+
 			if(typeof(state) === null){
 				return false;
 			}else{
@@ -105,14 +105,14 @@
 	<div class="row">
 		<? if(!$this->adm->logged): ?>
 		<div class="col-md-12 center"><img height="34" src="<?=IMG?>logo_200x_white.png" alt="<?=TITLE?>"></div>
-		<? else: ?>		
+		<? else: ?>
     	<div class="col-md-7 left">
     		<img height="34" class="top-logo" src="<?=IMG?>logo_200x_white.png" alt="<?=TITLE?>">
     		<div class="link">
     			<a href="<?=HOMEDOMAIN?>" target="_blank">www.arena.hu</a>
     		</div>
     	</div>
-        
+
         <div class="col-md-5" align="right">
         	<div class="shower">
             	<i class="fa fa-user"></i>
@@ -123,10 +123,10 @@
                 		<li><a href="/home/exit">Kijelentkezés</a></li>
                 	</ul>
                 </div>
-            </div>               
+            </div>
         	<div class="shower no-bg">
-        		<a href="<?=FILE_BROWSER_IMAGE?>" data-fancybox-type="iframe" class="iframe-btn">Galéria <i class="fa fa-picture-o"></i></a>            	
-            </div> 
+        		<a href="<?=FILE_BROWSER_IMAGE?>" data-fancybox-type="iframe" class="iframe-btn">Galéria <i class="fa fa-picture-o"></i></a>
+            </div>
         </div>
         <? endif; ?>
     </div>
@@ -152,7 +152,7 @@
                 <div class="left links"><a href="<?=HOMEDOMAIN?>"><i class="fa fa-angle-left"></i> www.arena.hu</a></div>
                 <div align="right"><button name="login">Bejelentkezés <i class="fa fa-arrow-circle-right"></i></button></div>
             </form>
-    		
+
 	    </div>
     </div>
 </div>
@@ -167,9 +167,10 @@
    		<div class="menu">
         	<ul>
             	<li class="<?=($this->gets[0] == 'home')?'on':''?>"><a href="/" title="Dashboard"><span class="ni">1</span><i class="fa fa-life-saver"></i> Dashboard</a></li>
-                <li class="<?=($this->gets[0] == 'megrendelesek')?'on':''?>"><a href="/megrendelesek" title="Megrendelések"><span class="ni">2</span><i class="fa fa-briefcase"></i> Megrendelések</a></li>
+              <li class="<?=($this->gets[0] == 'b2b')?'on':''?>"><a href="/b2b" title="B2B Adminisztráció"><span class="ni">2</span><i class="fa fa-university"></i> B2B</a></li>
+              <li class="<?=($this->gets[0] == 'megrendelesek')?'on':''?>"><a href="/megrendelesek" title="Megrendelések"><span class="ni">2</span><i class="fa fa-briefcase"></i> Megrendelések</a></li>
             	<li class="<?=($this->gets[0] == 'termekek')?'on':''?>"><a href="/termekek" title="Termékek"><span class="ni">2</span><i class="fa fa-cubes"></i> Termékek</a></li>
-                <li class="<?=($this->gets[0] == 'lookbook')?'on':''?>"><a href="/lookbook" title="Lookbook"><span class="ni">2</span><i class="fa fa-book"></i> Lookbook</a></li>
+              <li class="<?=($this->gets[0] == 'lookbook')?'on':''?>"><a href="/lookbook" title="Lookbook"><span class="ni">2</span><i class="fa fa-book"></i> Lookbook</a></li>
                 <li class="<?=($this->gets[0] == 'felhasznalok')?'on':''?>"><a href="/felhasznalok" title="Felhasználók"><span class="ni">2</span><i class="fa fa-group"></i> Felhasználók</a></li>
                 <li class="<?=($this->gets[0] == 'watercard')?'on':''?>"><a href="/watercard" title="Arena Water Card"><span class="ni">2</span><i class="fa fa-gift"></i>Jövő Bajnokai</a></li>
                 <li class="<?=($this->gets[0] == 'feliratkozok')?'on':''?>"><a href="http://arena.hu/webgalamb/wg5.php" title="Feliratkozók"><span class="ni">2</span><i class="fa fa-check-square-o"></i> Feliratkozók</a></li>
