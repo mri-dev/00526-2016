@@ -1,4 +1,5 @@
 <?
+use B2B\B2BUsers;
 
 class b2b extends Controller{
 		function __construct(){
@@ -7,8 +8,6 @@ class b2b extends Controller{
 
 			$this->view->adm = $this->AdminUser;
 			$this->view->adm->logged = $this->AdminUser->isLogged();
-
-
 
 			// SEO Információk
 			$SEO = null;
@@ -28,7 +27,9 @@ class b2b extends Controller{
 
     public function users()
     {
-      # code...
+      $users = new B2BUsers( $this->db );
+
+			$this->out('users', $users->get());
     }
 
 		function __destruct(){

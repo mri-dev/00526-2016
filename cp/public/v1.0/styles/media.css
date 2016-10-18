@@ -421,8 +421,45 @@ i.edit:hover{
 	cursor:pointer;
 	color:#448feb;
 }
-
-
+.tab-menu{
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 25px;
+}
+.tab-menu ul li {
+  display: inline-block;
+  *display: inline;
+  zoom:1;
+}
+.tab-menu ul li a {
+  padding: 0 10px;
+  line-height: 25px;
+  display: block;
+  color: #888888;
+  position: relative;
+}
+.tab-menu ul li.on a:after {
+  content:"";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  border-width: 5px 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+  -moz-transform:translateX(-50%);
+  -webkit-transform:translateX(-50%);
+  transform:translateX(-50%);
+}
+.tab-menu ul li.base {
+  margin-right: 15px;
+}
+.tab-menu ul li.base a {
+  border-right: 1px solid #eeeeee;
+  color: #444444;
+}
+.tab-menu ul li.on a {
+  color: black;
+  font-weight: bold;
+}
 .con .newWire{
 	border:1px solid #dddddd;
 	padding:5px 15px;

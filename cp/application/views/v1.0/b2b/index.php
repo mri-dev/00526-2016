@@ -1,1 +1,1 @@
-b2b main
+<? $this->render('b2b/menu'); ?>

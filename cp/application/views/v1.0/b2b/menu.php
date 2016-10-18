@@ -1,6 +1,7 @@
+<h1>B2B</h1>
 <div class="tab-menu">
   <ul>
-    <li class="<?=($this->gets['2'] == '')?'on':''?>"><a href="/b2b/users">Felhasználók</a></li>
-    <li class="<?=($this->gets['2'] == 'create')?'on':''?>"><a href="/b2b/users/create/">Új felhasználó</a></li>
+    <li class="base"><a href="/b2b/"><i class="fa fa-home"></i> Dashboard</a></li>
+    <li class=""><a href="/b2b/users">Felhasználók</a></li>
   </ul>
 </div>

@@ -12,7 +12,9 @@ class B2BFactory
   {
     $this->db = $db;
 
-    if(!$db) die(__CLASS__.': Hiányzik az adatbázis link.');
+    if(!$db) {
+      die(get_class($this).' > '.__CLASS__.': Hiányzik az adatbázis link.');
+    }
   }
 
   public function __destruct()
