@@ -33,14 +33,14 @@
       <tr>
          <td align="center"><?=$u->ID()?></td>
          <td>
-            <div class="ceg"><?=$u->Name()?></div>
+            <div class="ceg"><?=$u->Name()?> <span class="addr" title="Cég telephely">(<?=$u->Address()?>)</span></div>
             <div class="contact">
               <span title="Kapcsolattartó neve"><i class="fa fa-user"></i> <?=$u->ContactName()?></span>
               <span title="Kapcsolat telefonszám"><i class="fa fa-phone"></i> <?=$u->ContactPhone()?></span>
             </div>
          </td>
          <td align="center"><?=$u->Email()?></td>
-         <td align="center"><?=($d[engedelyezve] == 1)?'<i title="Engedélyezve" mode="engedelyezve" class="fa fa-check vtgl" fid="'.$d[ID].'"></i>':'<i mode="engedelyezve" class="fa fa-times vtgl" fid="'.$d[ID].'" title="Tiltva"></i>'?></td>
+         <td align="center"><?=($u->Active())?'<i title="Engedélyezve" mode="engedelyezve" class="fa fa-check vtgl" fid="'.$u->ID().'"></i>':'<i mode="engedelyezve" class="fa fa-times vtgl" fid="'.$u->ID().'" title="Tiltva"></i>'?></td>
          <td align="center"><?=Helper::softDate($u->Lastlogin())?><br><em>(<?=Helper::distanceDate($u->Lastlogin())?>)</em></td>
          <td align="center"><?=Helper::softDate($u->CreatedAt())?> <br><em>(<?=Helper::distanceDate($u->CreatedAt())?>)</em></td>
          <td align="center">

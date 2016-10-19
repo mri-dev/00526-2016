@@ -61,9 +61,17 @@ class B2BUser extends B2BFactory
   {
     return $this->data['email'];
   }
+  public function Address()
+  {
+    return $this->data['telephely'];
+  }
   public function CreatedAt()
   {
     return $this->data['letrehozva'];
+  }
+  public function Active()
+  {
+    return ($this->data['engedelyezve'] == '1') ? true : false;
   }
   public function Lastlogin()
   {
