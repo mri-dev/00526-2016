@@ -80,8 +80,8 @@ h1, h2, h3, h4{
 	margin-left:0;
 	margin-right:0;
 }
-.row.np div[class^=col-md],
-.row.np div[class^=col-sm]
+.row.np > div[class^=col-md],
+.row.np > div[class^=col-sm]
 {
 	padding-left:0;
 	padding-right:0;
@@ -433,6 +433,7 @@ i.edit:hover{
 .tab-menu ul li a {
   padding: 0 10px;
   line-height: 25px;
+  font-size: 1.2em;
   display: block;
   color: #888888;
   position: relative;
@@ -966,6 +967,9 @@ button.watch i{
 div.divider{
 	background:#ddd;
 	height:1px;
+}
+div.divider.spaced{
+  margin: 15px 0;
 }
 div.np{
 	padding:0;
@@ -2529,4 +2533,21 @@ fieldset.block {
     line-height: 1;
     margin-top: 5px;
     color: #acacac;
+}
+
+.b2b-users-table .ceg {
+  font-size: 1.2em;
+  color: black;
+  font-weight: bold;
+}
+.b2b-users-table .ceg .addr {
+  font-weight: normal;
+  color: #5c5c5c;
+}
+.b2b-users-table .contact {
+  color: #9c9c9c;
+  margin-top: 4px;
+}
+.b2b-users-table .contact span {
+ margin-right: 5px;
 }

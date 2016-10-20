@@ -5,7 +5,7 @@ use B2B\B2BUserSet;
 
 class B2BUsers extends B2BFactory
 {
-  public $total_users = false;
+  public $total_users = 0;
   public $list_max_page = 1;
   public $list_current_page = 1;
   public $list_page_limit = 50;
@@ -24,6 +24,7 @@ class B2BUsers extends B2BFactory
   public function get( $arg = array() )
   {
     $excp = array();
+    $filters = $arg['filters'];
 
     $q = "SELECT SQL_CALC_FOUND_ROWS";
     // Get
@@ -32,6 +33,23 @@ class B2BUsers extends B2BFactory
     $q .= " FROM ".self::DB_USERS." as u";
     // Where
     $q .= " WHERE 1 = 1";
+
+    if(!empty($filters)){
+      foreach ($filters as $fkey => $fval)
+      {
+        switch ($fkey) {
+          default:
+            $q .= " and {$fkey} = :filter_{$fkey}";
+            $excp[':filter_'.$fkey] = trim($fval);
+          break;
+          case 'nev':
+            $q .= " and ({$fkey} LIKE :filter_{$fkey} or u.kapcsolat_nev LIKE :filter_{$fkey} or u.telephely LIKE  :filter_{$fkey})";
+            $excp[':filter_'.$fkey] = '%'.trim($fval).'%';
+          break;
+        }
+      }
+    }
+
     // Order
     $q .= "";
     // Limit

@@ -1,6 +1,7 @@
 <? $this->render('b2b/users/menu'); ?>
 <div>
   <strong><?=$this->b2busers->listCurrentPage()?>. oldal</strong> / <?=$this->b2busers->listMaxPage()?> &nbsp; | &nbsp; <strong><?=$this->b2busers->totalUsers()?> felhasználó</strong>
+  <? if($_COOKIE[filtered] == '1'): ?><span class="filtered"> a szűrőfeltételek alapján &nbsp;&nbsp;<a href="/<?=$this->gets[0]?>/users/clearfilters/" class="btn btn-danger btn-sm">szűrőfeltételek törlése</a></span><? endif; ?>
 </div>
 <?=$this->navigator?>
 <table class="table termeklista table-bordered b2b-users-table">
@@ -19,8 +20,8 @@
       <form class="" action="" method="post">
       <tr class="search <? if($_COOKIE[filtered] == '1'): ?>filtered<? endif;?>">
          <td><input type="text" name="ID" class="form-control" value="<?=$_COOKIE[filter_ID]?>" /></td>
-         <td><input type="text" name="nev" class="form-control" placeholder="felhasználó neve..." value="<?=$_COOKIE[filter_nev]?>" /></td>
-         <td><input type="text" name="email" class="form-control" placeholder="e-mail cím..." value="<?=$_COOKIE[filter_email]?>" /></td>
+         <td><input type="text" name="nev" class="form-control" placeholder="Keresés itt: név, kapcsolat név, telephely." value="<?=$_COOKIE[filter_nev]?>" /></td>
+         <td><input type="text" name="email" class="form-control" placeholder="E-mail cím" value="<?=$_COOKIE[filter_email]?>" /></td>
          <td></td>
          <td></td>
          <td></td>

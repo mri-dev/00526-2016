@@ -49,6 +49,10 @@ class B2BUser extends B2BFactory
   {
     return $this->data['nev'];
   }
+  public function Taxnumber()
+  {
+    return $this->data['adoszam'];
+  }
   public function ContactName()
   {
     return $this->data['kapcsolat_nev'];
@@ -76,6 +80,10 @@ class B2BUser extends B2BFactory
   public function Lastlogin()
   {
     return $this->data['utoljara_belepett'];
+  }
+  public function Lastupdate()
+  {
+    return $this->data['utolso_frissites'];
   }
 }
 

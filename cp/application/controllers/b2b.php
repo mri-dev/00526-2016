@@ -36,11 +36,45 @@ class b2b extends Controller{
 			{
 				// Felhaszálók listázása oldal
 				default:
+
+					if(Post::on('filterList')){
+						$filtered = false;
+
+						if($_POST[ID] != ''){
+							setcookie('filter_ID',$_POST[ID],time()+60*24,'/'.$this->view->gets[0]);
+							$filtered = true;
+						}else{
+							setcookie('filter_ID','',time()-100,'/'.$this->view->gets[0]);
+						}
+						if($_POST[nev] != ''){
+							setcookie('filter_nev',$_POST[nev],time()+60*24,'/'.$this->view->gets[0]);
+							$filtered = true;
+						}else{
+							setcookie('filter_nev','',time()-100,'/'.$this->view->gets[0]);
+						}
+						if($_POST[email] != ''){
+							setcookie('filter_email',$_POST[email],time()+60*24,'/'.$this->view->gets[0]);
+							$filtered = true;
+						}else{
+							setcookie('filter_email','',time()-100,'/'.$this->view->gets[0]);
+						}
+
+						if($filtered){
+							setcookie('filtered','1',time()+60*24*7,'/'.$this->view->gets[0]);
+						}else{
+							setcookie('filtered','',time()-100,'/'.$this->view->gets[0]);
+						}
+						Helper::reload();
+					}
+
 					$users->setPageLimit(25);
 
 					// B2B Felhaszálók listájának lekérdezése
-					$this->out('users', $users->get(array(
-					)));
+					$arg = array();
+					$filters = Helper::getCookieFilter('filter',array('filtered'));
+					$arg[filters] = $filters;
+
+					$this->out('users', $users->get($arg));
 
 					// Lapozó
 					$this->view->navigator = (new Pagination(array(
@@ -67,6 +101,23 @@ class b2b extends Controller{
 				// Felhasználó törlés oldal
 				case 'delete':
 
+				break;
+
+				// Fiók aktiválás
+				case 'activate':
+				break;
+
+				// Fiók felfüggesztés
+				case 'deactivate':
+				break;
+
+				// Szűrőfeltételek törlése
+				case 'clearfilters':
+					setcookie('filter_ID','',time()-100,'/'.$this->view->gets[0]);
+					setcookie('filter_nev','',time()-100,'/'.$this->view->gets[0]);
+					setcookie('filter_email','',time()-100,'/'.$this->view->gets[0]);
+					setcookie('filtered','',time()-100,'/'.$this->view->gets[0]);
+					Helper::reload('/'.$this->view->gets[0].'/users');
 				break;
 			}
 
