@@ -41,6 +41,53 @@ class B2BUser extends B2BFactory
     return $this;
   }
 
+  public function save($post)
+  {
+    extract($post);
+    $excp = array();
+
+    $post['szamlazasi_adatok'] = json_encode($post['szamlazas'], \JSON_UNESCAPED_UNICODE);
+    $post['szallitasi_adatok'] = json_encode($post['szallitas'], \JSON_UNESCAPED_UNICODE);
+    unset($post['szallitas']);
+    unset($post['szamlazas']);
+
+    $q = "UPDATE ".self::DB_USERS . " SET ";
+    $update = '';
+    foreach ($post as $key => $value) {
+      $update .= $key . " = :key_".$key.", ";
+      $excp[':key_'.$key] = trim($value);
+    }
+
+    $update .= "utolso_frissites = :lastrefresh, ";
+    $excp[':lastrefresh'] = trim(NOW);
+
+    $q .= rtrim($update, ", ");
+    $q .= " WHERE ID = :id;";
+
+    $excp[':id'] = $this->ID();
+
+    try {
+      $s = $this->db->db->prepare($q);
+      $s->execute($excp);
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+  }
+
+  public function deactivate()
+  {
+    try {
+      $s = $this->db->db->prepare("UPDATE ".self::DB_USERS." SET engedelyezve = :s WHERE ID = :id;");
+      $s->execute(array(
+        ':s'  => 0,
+        ':id' => $this->ID()
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+  }
+
   public function ID()
   {
     return $this->data['ID'];
@@ -84,6 +131,14 @@ class B2BUser extends B2BFactory
   public function Lastupdate()
   {
     return $this->data['utolso_frissites'];
+  }
+  public function SzallitasList()
+  {
+    return json_decode($this->data['szallitasi_adatok'], true);
+  }
+  public function SzamlazasList()
+  {
+    return json_decode($this->data['szamlazasi_adatok'], true);
   }
 }
 

@@ -8,7 +8,9 @@
       <h2><strong><?=$u->Name()?></strong> szerkesztése</h2>
     </div>
   </div>
-  <br><br>
+  <br>
+  <? if(isset($this->rmsg)): ?><?=$this->rmsg?><? endif; ?>
+  <br>
   <div class="row np">
     <div class="col-sm-8">
       <form action="" method="post">
@@ -25,7 +27,7 @@
         </div>
         <div class="col-md-6">
           <label for="">Telephely</label>
-          <input type="text" name="nev" value="<?=$u->Address()?>" class="form-control">
+          <input type="text" name="telephely" value="<?=$u->Address()?>" class="form-control">
         </div>
       </div>
       <br>
@@ -54,6 +56,47 @@
         <div class="col-md-6">
           <label for="">Kapcsolattartó telefonszám</label>
           <input type="text" name="kapcsolat_telefon" value="<?=$u->ContactPhone()?>" class="form-control">
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <br><br>
+          <h3>Számlázási adatok</h3>
+          <br>
+          <?
+          $szamlazas = $u->SzamlazasList();
+          foreach (\B2B\B2BFactory::getSzamlazasFields() as $key) { ?>
+          <div class="row np">
+            <div class="col-md-12">
+              <label for=""><?=\B2B\B2BFactory::szmfieldName($key)?></label>
+              <input type="text" name="szamlazas[<?=$key?>]" value="<?=$szamlazas[$key]?>" class="form-control">
+            </div>
+          </div>
+          <br>
+          <? }?>
+        </div>
+        <div class="col-md-6">
+          <br><br>
+          <h3>Szállítási adatok</h3>
+          <br>
+          <?
+          $szallitas = $u->SzallitasList();
+          foreach (\B2B\B2BFactory::getSzallitasFields() as $key) { ?>
+          <div class="row np">
+            <div class="col-md-12">
+              <label for=""><?=\B2B\B2BFactory::szmfieldName($key)?></label>
+              <input type="text" name="szallitas[<?=$key?>]" value="<?=$szallitas[$key]?>" class="form-control">
+            </div>
+          </div>
+          <br>
+          <? }?>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn-success" name="saveUser" value="1">Változások mentése <i class="fa fa-save"></i></button>
         </div>
       </div>
       </form>

@@ -21,6 +21,64 @@ class B2BFactory
   {
     $this->db = null;
   }
+
+  public static function getSzamlazasFields()
+  {
+    return array(
+      "nev",
+      "irsz",
+      "city",
+      "kerulet",
+      "uhsz",
+      "kozterulet_jellege",
+      "hazszam",
+      "epulet",
+      "lepcsohaz",
+      "szint",
+      "ajto"
+    );
+  }
+
+  public static function getSzallitasFields()
+  {
+    return array(
+      "nev",
+      "irsz",
+      "city",
+      "kerulet",
+      "uhsz",
+      "kozterulet_jellege",
+      "hazszam",
+      "epulet",
+      "lepcsohaz",
+      "szint",
+      "ajto",
+      "phone"
+    );
+  }
+
+  /**
+  * Szállítás és Számlázási kulcs elnevezése
+  **/
+  public static function szmfieldName( $key )
+  {
+    $arr = array(
+      "nev" => "Név",
+      "irsz" => "Irányítószám",
+      "city" => "Város / Község",
+      "kerulet" => "Kerület",
+      "uhsz" => "Közterület neve (utca elnevezés)",
+      "kozterulet_jellege" => "Közterület jellege",
+      "hazszam" => "Házszám",
+      "epulet" => "Épület",
+      "lepcsohaz" => "Lépcsőház",
+      "szint" => "Szint",
+      "ajto" => "Ajtó",
+      "phone" => "Telefonszám"
+    );
+
+    return $arr[$key];
+  }
 }
 
 ?>

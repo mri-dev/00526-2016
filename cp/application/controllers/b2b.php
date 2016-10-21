@@ -11,6 +11,11 @@ class b2b extends Controller{
 			$this->view->adm = $this->AdminUser;
 			$this->view->adm->logged = $this->AdminUser->isLogged();
 
+
+			if(isset($_GET['rmsg'])) {
+				$this->out('rmsg', Helper::makeAlertMsg($_GET['t'], $_GET['rmsg']));
+			}
+
 			// SEO Információk
 			$SEO = null;
 			// Site info
@@ -95,6 +100,20 @@ class b2b extends Controller{
 				// Felhasználó szerkesztés oldal
 				case 'edit':
 					$user = (new B2BUser($this->db))->get( $this->gets[3] );
+
+					if (Post::on('saveUser')) {
+						unset($_POST['saveUser']);
+						try {
+							$user->save($_POST);
+							Helper::reload('?rmsg=Változások sikeresen mentve&t=pSuccess');
+						} catch (Exception $e) {
+							$this->view->err	= true;
+							$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage());
+						}
+
+						print_r($_POST);
+					}
+
 					$this->out('u', $user );
 				break;
 
@@ -109,6 +128,9 @@ class b2b extends Controller{
 
 				// Fiók felfüggesztés
 				case 'deactivate':
+					$user = (new B2BUser($this->db))->get( $this->gets[3] );
+					$user->deactivate();
+					Helper::reload('/b2b/users/edit/'.$u->ID());
 				break;
 
 				// Szűrőfeltételek törlése
