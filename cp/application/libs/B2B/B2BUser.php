@@ -1,15 +1,42 @@
 <?php
 namespace B2B;
 
+use Exceptions\FormException;
+
 class B2BUser extends B2BFactory
 {
   private $data = false;
+  public $required_create_fields = array(
+    'nev', 'email', 'telephely', 'adoszam', 'jelszo'
+
+  );
   public function __construct( $db = null, $data = null )
   {
     parent::__construct($db);
     unset($db);
     $this->data = $data;
     return $this;
+  }
+
+  public function create($post)
+  {
+    $new_id = false;
+    $missed_field_count = 0;
+    $missed_fields = array();
+
+    foreach ($post as $key => $value) {
+      if (in_array($key, $this->required_create_fields) && empty($value)) {
+        $missed_field_count++;
+        $missed_fields[] = $key;
+      }
+    }
+
+    if($missed_field_count != 0) {
+      throw new FormException("Kötelező mezők adatai hiányoznak.", $missed_fields);
+    }
+
+
+    return $new_id;
   }
 
   public function get( $id )
@@ -73,6 +100,24 @@ class B2BUser extends B2BFactory
       $this->db->printPDOErrorMsg($e, $q, true);
     }
 
+  }
+
+  public function hasUser()
+  {
+    return ($this->data) ? true : false;
+  }
+
+  public function activate()
+  {
+    try {
+      $s = $this->db->db->prepare("UPDATE ".self::DB_USERS." SET engedelyezve = :s WHERE ID = :id;");
+      $s->execute(array(
+        ':s'  => 1,
+        ':id' => $this->ID()
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
   }
 
   public function deactivate()

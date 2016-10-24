@@ -117,12 +117,22 @@
           <?=($u->Lastlogin())?$u->Lastlogin():'n.a.'?>
         </div>
       </div>
-
       <br>
       <div class="row np">
         <div class="col-md-12">
           <label for="">Utoljára frissítve</label><br>
           <?=($u->Lastupdate())?$u->Lastupdate():'n.a.'?>
+        </div>
+      </div>
+      <br>
+      <div class="row np">
+        <div class="col-md-12">
+          <label for="">Státusz</label><br>
+          <? if($u->Active()): ?>
+          <div class="label label-success">Aktivált</div>
+          <? else: ?>
+            <div class="label label-warning">Inaktivált</div>
+          <? endif; ?>
         </div>
       </div>
       <div class="divider spaced"></div>

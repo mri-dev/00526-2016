@@ -36,7 +36,6 @@ class b2b extends Controller{
     {
 			$users = new B2BUsers( $this->db );
 
-
 			switch($this->gets[2])
 			{
 				// Felhaszálók listázása oldal
@@ -95,11 +94,31 @@ class b2b extends Controller{
 				// Felhasználók létrehozása oldal
 				case 'create':
 
+				$user = new B2BUser($this->db);
+				if (Post::on('createUser')) {
+					unset($_POST['createUser']);
+					try {
+						$cruid = $user->create($_POST);
+						Helper::reload('/b2b/users/edit/'.$cruid.'?rmsg=Felhasználó létrehozva&t=pSuccess');
+					} catch (\Exceptions\FormException $e) {
+						$this->view->err	= $e->getErrorData();
+						$emsg_af = '';
+						if($this->view->err['miss_count'] != 0) {
+							$emsg_af .= " | Hiányzó mezők: ".$this->view->err['miss_count']." db";
+						}
+						$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage().$emsg_af);
+					}
+				}
+
 				break;
 
 				// Felhasználó szerkesztés oldal
 				case 'edit':
 					$user = (new B2BUser($this->db))->get( $this->gets[3] );
+
+					if(!$user->hasUser()){
+						Helper::reload('/b2b/users/');
+					}
 
 					if (Post::on('saveUser')) {
 						unset($_POST['saveUser']);
@@ -111,7 +130,6 @@ class b2b extends Controller{
 							$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage());
 						}
 
-						print_r($_POST);
 					}
 
 					$this->out('u', $user );
@@ -124,13 +142,16 @@ class b2b extends Controller{
 
 				// Fiók aktiválás
 				case 'activate':
+					$user = (new B2BUser($this->db))->get( $this->gets[3] );
+					$user->activate();
+					Helper::reload('/b2b/users/edit/'.$user->ID());
 				break;
 
 				// Fiók felfüggesztés
 				case 'deactivate':
 					$user = (new B2BUser($this->db))->get( $this->gets[3] );
 					$user->deactivate();
-					Helper::reload('/b2b/users/edit/'.$u->ID());
+					Helper::reload('/b2b/users/edit/'.$user->ID());
 				break;
 
 				// Szűrőfeltételek törlése
