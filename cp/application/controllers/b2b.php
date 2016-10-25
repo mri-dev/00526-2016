@@ -109,6 +109,7 @@ class b2b extends Controller{
 						$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage().$emsg_af);
 					}
 				}
+				$this->out('required_create_fields', $user->required_create_fields);
 
 				break;
 

@@ -41,6 +41,16 @@
           <input type="text" name="email" value="<?=$u->Email()?>" class="form-control">
         </div>
       </div>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="">Jelszó</label>
+          <input type="text" name="jelszo" value="<?=$u->PasswordString()?>" class="form-control">
+        </div>
+        <div class="col-md-6">
+
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <br><br>

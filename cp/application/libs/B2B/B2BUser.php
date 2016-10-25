@@ -7,8 +7,10 @@ class B2BUser extends B2BFactory
 {
   private $data = false;
   public $required_create_fields = array(
-    'nev', 'email', 'telephely', 'adoszam', 'jelszo'
-
+    'nev', 'email', 'telephely', 'adoszam', 'jelszo',
+    'kapcsolat_nev', 'kapcsolat_telefon',
+    'szallitas' => array( 'nev', 'irsz', 'uhsz', 'city', 'kozterulet_jellege', 'hazszam', 'phone' ),
+    'szamlazas' => array( 'nev', 'irsz', 'uhsz', 'city', 'kozterulet_jellege', 'hazszam' ),
   );
   public function __construct( $db = null, $data = null )
   {
@@ -25,9 +27,19 @@ class B2BUser extends B2BFactory
     $missed_fields = array();
 
     foreach ($post as $key => $value) {
-      if (in_array($key, $this->required_create_fields) && empty($value)) {
-        $missed_field_count++;
-        $missed_fields[] = $key;
+      if( !in_array($key, array('szallitas', 'szamlazas')) ){
+        if (in_array($key, $this->required_create_fields) && empty($value)) {
+          $missed_field_count++;
+          $missed_fields[] = $key;
+        }
+      } else {
+        // Számlázás & Szállítás check
+        foreach ($post[$key] as $skey => $svalue) {
+          if (in_array($skey, $this->required_create_fields[$key]) && empty($svalue)) {
+            $missed_field_count++;
+            $missed_fields[] = $key.'_'.$skey;
+          }
+        }
       }
     }
 
@@ -35,8 +47,84 @@ class B2BUser extends B2BFactory
       throw new FormException("Kötelező mezők adatai hiányoznak.", $missed_fields);
     }
 
+    $jelszohash = \Hash::jelszo(trim($post['jelszo']));
+
+    $usage = $this->checkEmailUsage($post['email']);
+
+    if ($usage === false) { throw new FormException("Nem lett megadva az e-mail cím."); }
+    if ($usage !== 0) { throw new FormException("Ezzel az e-mail címmel (".$post['email'].") már regisztráltak. Felh. ID: ".$usage); }
+
+    // Save to database
+    $dataset = array();
+    $szallitas = json_encode($post['szallitas'], \JSON_UNESCAPED_UNICODE);
+    $szamlazas = json_encode($post['szamlazas'], \JSON_UNESCAPED_UNICODE);
+    unset($post['szamlazas']);
+    unset($post['szallitas']);
+    $dataset[':szamlazas'] = $szamlazas;
+    $dataset[':szallitas'] = $szallitas;
+    $dataset[':jelszohash'] = $jelszohash;
+
+    foreach ($post as $key => $value) {
+      $dataset[':'.$key] = $value;
+    }
+
+    try {
+      $s = $this->db->db->prepare("INSERT INTO ".self::DB_USERS."
+      (email, nev, jelszo, jelszo_str, adoszam, telephely, kapcsolat_nev, kapcsolat_telefon, szamlazasi_adatok, szallitasi_adatok) VALUES
+      (:email, :nev, :jelszohash, :jelszo, :adoszam, :telephely, :kapcsolat_nev, :kapcsolat_telefon, :szamlazas, :szallitas);");
+      $s->execute($dataset);
+      $new_id = $this->db->db->lastInsertId();
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
 
     return $new_id;
+  }
+
+  public function checkEmailUsage( $email = false )
+  {
+    if (!$email) {
+      return false;
+    }
+
+    try {
+      $s = $this->db->db->prepare("SELECT ID FROM ".self::DB_USERS." WHERE email = :email;");
+      $s->execute(array(
+        ':email' => trim($email)
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    if($s->rowCount() === 0) return 0;
+
+    $id = $s->fetchColumn();
+
+    return $id;
+  }
+
+  public function validateToLogin( $email = false, $pass = false, $return_record = 'ID' )
+  {
+    if (!$email) { return false; }
+    if (!$pass) { return false; }
+
+    $passhash = \Hash::jelszo(trim($pass));
+
+    try {
+      $s = $this->db->db->prepare("SELECT ".$return_record." FROM ".self::DB_USERS." WHERE email = :email and jelszo = :pw;");
+      $s->execute(array(
+        ':email'  => trim($email),
+        ':pw'     => $passhash
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    if($s->rowCount() === 0) return false;
+
+    $backrecord = $s->fetchColumn();
+
+    return $backrecord;
   }
 
   public function get( $id )
@@ -81,12 +169,17 @@ class B2BUser extends B2BFactory
     $q = "UPDATE ".self::DB_USERS . " SET ";
     $update = '';
     foreach ($post as $key => $value) {
+      if($key == 'jelszo'){
+        $value = \Hash::jelszo($value);
+      }
       $update .= $key . " = :key_".$key.", ";
       $excp[':key_'.$key] = trim($value);
     }
 
     $update .= "utolso_frissites = :lastrefresh, ";
+    $update .= "jelszo_str = :jelszo_str, ";
     $excp[':lastrefresh'] = trim(NOW);
+    $excp[':jelszo_str']  = $post['jelszo'];
 
     $q .= rtrim($update, ", ");
     $q .= " WHERE ID = :id;";
@@ -144,6 +237,10 @@ class B2BUser extends B2BFactory
   public function Taxnumber()
   {
     return $this->data['adoszam'];
+  }
+  public function PasswordString()
+  {
+    return $this->data['jelszo_str'];
   }
   public function ContactName()
   {
