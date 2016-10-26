@@ -1,10 +1,30 @@
 <?
+use B2B\B2BAuth;
 
 class b2b extends Controller{
+		const SESSION_URL_TIMEOUT_SEC = 60;
 		function __construct(){
 			parent::__construct();
 
-			
+			if(isset($_GET['validAuth']))
+			{
+				$msg = "<h3 style='margin: 0 0 20px 0;'>Sikeres azonosítás, bejelentkező email elküldve!</h3>E-mail címére megküldtük a bejelentkező URL-t, amivel beléphet a rendszerbe. A bejelenetkező link ".self::SESSION_URL_TIMEOUT_SEC." perc után elévűl.";
+				$this->out('rmsg', Helper::makeAlertMsg('pSuccess', $msg));
+				unset($msg);
+			}
+
+			$auth = new B2BAuth($this->db);
+
+			if (Post::on('authB2B'))
+			{
+				try {
+					$auth_user = $auth->login($_POST['email'], $_POST['pw']);
+					Helper::reload('/b2b/?validAuth=1');
+				} catch (Exception $e) {
+					$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage());
+				}
+			}
+
 			// SEO Információk
 			$SEO = null;
 			// Site info

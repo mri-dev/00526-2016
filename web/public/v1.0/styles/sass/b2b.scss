@@ -1,0 +1,89 @@
+$blue: #0cbded;
+
+.b2b-view{
+  &.login-page{
+    .info-block{
+      padding-top: 40px;
+      .img{
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .head{
+        h3{
+          font-size: 1.4em;
+          font-weight: bold;
+          color: #000000;
+        }
+      }
+
+      .desc{
+        strong{ color: #444444; }
+        color: #767676;
+      }
+    }
+
+    .login-module{
+      margin-top: 40px;
+      h1{
+        text-align: center;
+        margin: 20px 0 ;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+      .formbox{
+        background: #fff;
+        padding: 15px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 0 10px 25px -17px #000000;
+        -moz-box-shadow: 0 10px 25px -17px #000000;
+        box-shadow: 0 10px 25px -17px #000000;
+        margin-bottom: 15px;
+
+        .loginname, .loginpw{
+          input {
+            line-height: 40px;
+            height: auto;
+            font-size: 1.2em;
+          }
+        }
+      }
+
+      .login-footer{
+        .auth-info{
+          margin-top: 25px;
+          font-size: 0.8em;
+          color: #aaaaaa;
+
+          .ico{
+            float: left;
+            margin: 0 10px 0 0;
+            i{
+              color: #faab17;
+              font-size: 70px;
+              width: 70px;
+              text-align: center;
+            }
+          }
+
+          .text {
+            strong{
+              color: #888888;
+              line-height: 1.7;
+              font-size: 1.2em;
+            }
+          }
+        }
+      }
+    }
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f9f9f9+0,e0e0e0+43,ffffff+81 */
+background: #f9f9f9; /* Old browsers */
+background: -moz-linear-gradient(top,  #f9f9f9 0%, #e0e0e0 43%, #ffffff 81%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #f9f9f9 0%,#e0e0e0 43%,#ffffff 81%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #f9f9f9 0%,#e0e0e0 43%,#ffffff 81%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+
+  }
+}

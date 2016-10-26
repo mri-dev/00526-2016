@@ -1,0 +1,78 @@
+/* line 4, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+.b2b-view.login-page {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f9f9f9+0,e0e0e0+43,ffffff+81 */
+  background: #f9f9f9;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #f9f9f9 0%, #e0e0e0 43%, #ffffff 81%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #f9f9f9 0%, #e0e0e0 43%, #ffffff 81%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #f9f9f9 0%, #e0e0e0 43%, #ffffff 81%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#ffffff',GradientType=0 );
+  /* IE6-9 */ }
+  /* line 5, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+  .b2b-view.login-page .info-block {
+    padding-top: 40px; }
+    /* line 7, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .info-block .img {
+      width: 80%;
+      margin: 0 auto; }
+    /* line 13, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .info-block .head h3 {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #000000; }
+    /* line 20, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .info-block .desc {
+      color: #767676; }
+      /* line 21, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+      .b2b-view.login-page .info-block .desc strong {
+        color: #444444; }
+  /* line 26, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+  .b2b-view.login-page .login-module {
+    margin-top: 40px; }
+    /* line 28, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .login-module h1 {
+      text-align: center;
+      margin: 20px 0;
+      font-weight: bold;
+      text-transform: uppercase; }
+    /* line 34, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .login-module .formbox {
+      background: #fff;
+      padding: 15px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      -webkit-box-shadow: 0 10px 25px -17px #000000;
+      -moz-box-shadow: 0 10px 25px -17px #000000;
+      box-shadow: 0 10px 25px -17px #000000;
+      margin-bottom: 15px; }
+      /* line 46, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+      .b2b-view.login-page .login-module .formbox .loginname input, .b2b-view.login-page .login-module .formbox .loginpw input {
+        line-height: 40px;
+        height: auto;
+        font-size: 1.2em; }
+    /* line 55, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+    .b2b-view.login-page .login-module .login-footer .auth-info {
+      margin-top: 25px;
+      font-size: 0.8em;
+      color: #aaaaaa; }
+      /* line 60, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+      .b2b-view.login-page .login-module .login-footer .auth-info .ico {
+        float: left;
+        margin: 0 10px 0 0; }
+        /* line 63, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+        .b2b-view.login-page .login-module .login-footer .auth-info .ico i {
+          color: #faab17;
+          font-size: 70px;
+          width: 70px;
+          text-align: center; }
+      /* line 72, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+      .b2b-view.login-page .login-module .login-footer .auth-info .text strong {
+        color: #888888;
+        line-height: 1.7;
+        font-size: 1.2em; }
+
+/*# sourceMappingURL=../b2b.map */

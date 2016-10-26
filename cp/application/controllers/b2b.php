@@ -11,11 +11,6 @@ class b2b extends Controller{
 			$this->view->adm = $this->AdminUser;
 			$this->view->adm->logged = $this->AdminUser->isLogged();
 
-
-			if(isset($_GET['rmsg'])) {
-				$this->out('rmsg', Helper::makeAlertMsg($_GET['t'], $_GET['rmsg']));
-			}
-
 			// SEO Információk
 			$SEO = null;
 			// Site info
