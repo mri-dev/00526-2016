@@ -2,9 +2,14 @@
 namespace B2B;
 
 use B2B\B2BUser;
+use MailManager\Mailer;
+use PortalManager\Template;
 
 class B2BAuth extends B2BFactory
 {
+  const SESSION_URL = '/b2b/?validateAuthSession=';
+  const VALIDETOSEC = 60;
+
   public function __construct( $db = null )
   {
     parent::__construct($db);
@@ -32,21 +37,65 @@ class B2BAuth extends B2BFactory
 
     $user->get($valided_user_id);
 
-    $login_session_url = $this->createLoginSession($valided_user_id);
+    $login_session_url = $this->createLoginSession($user);
 
     $this->sendAuthMail($user, $login_session_url);
 
     return $user;
   }
 
-  private function createLoginSession( $id )
+  private function createLoginSession( \B2B\B2BUser $user )
   {
+    if( !$user ) return false;
+    $id = $user->ID();
 
+    // Aktuális session törlése
+    $this->db->query("DELETE FROM ".self::DB_SESSION." WHERE userID = ".$id.";");
+
+    // Összes lejárt session törlése
+    $this->db->query("DELETE FROM ".self::DB_SESSION." WHERE valideto < UNIX_TIMESTAMP();");
+
+    $email = $user->Email();
+    $randomkey  = uniqid();
+    $hashkey    = md5($randomkey.'.'.$id.'.'.$email.'.'.$user->PasswordHash());
+    $valideto   = time() + (self::VALIDETOSEC * 60);
+
+    try {
+      $s = $this->db->db->prepare("INSERT INTO ".self::DB_SESSION."(userID, email, hashkey, randomkey, valideto) VALUES(:id, :email, :hashkey, :randomkey, :valideto);");
+      $s->execute(array(
+        ':id' => $id,
+        ':email' => $email,
+        ':hashkey' => $hashkey,
+        ':randomkey' => $randomkey,
+        ':valideto' => $valideto
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    return self::SESSION_URL . $hashkey;
   }
 
-  public function sendAuthMail( $user, $login_url )
+  public function sendAuthMail( \B2B\B2BUser $user, $login_url )
   {
+    // Bejelentkező e-mail kiküldése
+		$mail = new Mailer(
+      $this->db->settings['page_title'],
+      $this->db->settings['email_noreply_address'],
+      $this->db->settings['mail_sender_mode']
+    );
+		$mail->add( $user->Email() );
+		$arg = array(
+			'settings' 		=> $this->db->settings,
+      'loginurl'    => DOMAIN.$login_url
+		);
+		$mail->setSubject( 'B2B Bejelentkezezés Megerősítése' );
 
+    $mailtemp = new Template( VIEW . 'templates/mail/' );
+    $msg = $mailtemp->get( 'b2b_user_auth', $arg );
+
+		$mail->setMsg($msg);
+		$re = $mail->sendMail();
   }
 
 }

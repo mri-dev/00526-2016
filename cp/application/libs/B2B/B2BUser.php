@@ -242,6 +242,10 @@ class B2BUser extends B2BFactory
   {
     return $this->data['jelszo_str'];
   }
+  public function PasswordHash()
+  {
+    return $this->data['jelszo'];
+  }
   public function ContactName()
   {
     return $this->data['kapcsolat_nev'];
