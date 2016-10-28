@@ -7,7 +7,7 @@ use PortalManager\Template;
 
 class B2BAuth extends B2BFactory
 {
-  const SESSION_URL = '/b2b/?validateAuthSession=';
+  const SESSION_URL = 'b2b/?validateAuthSession=';
   const VALIDETOSEC = 60;
 
   public function __construct( $db = null )
@@ -42,6 +42,15 @@ class B2BAuth extends B2BFactory
     $this->sendAuthMail($user, $login_session_url);
 
     return $user;
+  }
+
+  public function loginBySession( $session = false )
+  {
+    if (!$session) {
+      throw new \Exception("Hiányzó azonosító kulcs. Bejelentkezés sikertelen.");
+    }
+
+    
   }
 
   private function createLoginSession( \B2B\B2BUser $user )
@@ -87,12 +96,17 @@ class B2BAuth extends B2BFactory
 		$mail->add( $user->Email() );
 		$arg = array(
 			'settings' 		=> $this->db->settings,
-      'loginurl'    => DOMAIN.$login_url
+      'loginurl'    => DOMAIN.$login_url,
+      'user'        => $user,
+      'ervenyes'    => (time() + (self::VALIDETOSEC * 60))
 		);
 		$mail->setSubject( 'B2B Bejelentkezezés Megerősítése' );
 
     $mailtemp = new Template( VIEW . 'templates/mail/' );
     $msg = $mailtemp->get( 'b2b_user_auth', $arg );
+
+    //echo $msg;
+    //exit;
 
 		$mail->setMsg($msg);
 		$re = $mail->sendMail();

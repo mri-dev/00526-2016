@@ -15,6 +15,17 @@ class b2b extends Controller{
 
 			$auth = new B2BAuth($this->db);
 
+			if(isset($_GET['validateAuthSession']))
+			{
+
+				try {
+					$auth->loginBySession($_GET['validateAuthSession']);
+					//Helper::reload('/b2b/');
+				} catch (Exception $e) {
+					$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage());
+				}
+			}
+
 			if (Post::on('authB2B'))
 			{
 				try {
