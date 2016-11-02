@@ -17,10 +17,11 @@ class b2b extends Controller{
 
 			if(isset($_GET['validateAuthSession']))
 			{
-
 				try {
-					$auth->loginBySession($_GET['validateAuthSession']);
-					//Helper::reload('/b2b/');
+					$authed = $auth->loginBySession($_GET['validateAuthSession']);
+					if ($authed) {
+						Helper::reload('/b2b/');
+					}
 				} catch (Exception $e) {
 					$this->view->rmsg = Helper::makeAlertMsg('pError', $e->getMessage());
 				}
@@ -50,6 +51,12 @@ class b2b extends Controller{
 			$SEO .= $this->view->addOG('site_name',TITLE);
 
 			$this->view->SEOSERVICE = $SEO;
+		}
+
+		public function logout()
+		{
+			unset($_SESSION['b2buserid']);
+			Helper::reload('/b2b/');
 		}
 
 		function __destruct(){

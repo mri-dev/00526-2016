@@ -50,7 +50,43 @@ class B2BAuth extends B2BFactory
       throw new \Exception("Hiányzó azonosító kulcs. Bejelentkezés sikertelen.");
     }
 
-    
+    try {
+      $s = $this->db->db->prepare("SELECT userID, email, valideto FROM ".self::DB_SESSION." WHERE hashkey = :session;");
+      $s->execute(array(
+        ':session' => $session
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    if ( $s->rowCount() == 0 ) {
+      throw new \Exception("Sikertelen azonosítás. Az Ön által használt bejelentkező URL hibás.");
+    }
+
+    $now = time();
+    $session_data = $s->fetch(\PDO::FETCH_ASSOC);
+
+    if ($now > $session_data['valideto']) {
+      throw new \Exception("Az Ön által használt bejelentkező URL időkerete lejárt. Indítsa el a bejelentkezési folyamatot újra.");
+    }
+
+    // Bejelentkeztetés
+    $_SESSION['b2buserid'] = $session_data['userID'];
+
+    // hashkey törlése
+    $this->db->query("DELETE FROM ".self::DB_SESSION." WHERE hashkey = '$session';");
+
+    // log login
+    try {
+      $s = $this->db->db->prepare("UPDATE ".self::DB_USERS." SET utoljara_belepett = now() WHERE ID = :uid;");
+      $s->execute(array(
+        ':uid' => $session_data['userID']
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    return true;
   }
 
   private function createLoginSession( \B2B\B2BUser $user )

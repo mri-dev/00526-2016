@@ -102,4 +102,17 @@
   font-size: 1.2em;
 }
 
+/* line 91, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+.b2b-view.dashboard-page .b2busertop {
+  border-bottom: 1px solid #dadada;
+  padding: 25px;
+  background: #f9f9f9;
+}
+
+/* line 96, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+.b2b-view.dashboard-page .b2busertop h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
 /*# sourceMappingURL=../b2b.map */

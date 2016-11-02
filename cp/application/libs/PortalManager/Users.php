@@ -1,13 +1,14 @@
-<? 
+<?
 namespace PortalManager;
 
 use MailManager\Mailer;
 use PortalManager\Template;
 use PortalManager\Portal;
+use B2B\B2BUser;
 
 /**
  * class Users
- * 
+ *
  */
 class Users
 {
@@ -24,10 +25,14 @@ class Users
 
 		$this->Portal = new Portal( $arg );
 		$this->getUser();
-	}	
-	
+	}
+
 	function get( $arg = array() )
 	{
+		if(defined('B2BLOGGED')){
+			return (new B2BUser( $this->db ))->getForWebsite( B2BLOGGED );
+		}
+
 		$ret 			= array();
 		$kedvezmenyek 	= array();
 		$kedvezmeny 	= 0;
@@ -38,11 +43,11 @@ class Users
 		$ret[options] 	= $arg;
 
 		$user_email = ( !$arg['user'] ) ? $this->user : $arg['user'];
-		
+
 		if(!$user_email) return false;
-		
+
 		$ret[email] = $user_email;
-		$ret[data] 	= ($user_email) ? $this->getData($user_email) : false; 
+		$ret[data] 	= ($user_email) ? $this->getData($user_email) : false;
 
 		if( !$ret[data] ) {
 			unset($_SESSION['user_email']);
@@ -56,7 +61,7 @@ class Users
 		$ret[szamlazasi_adat] = json_decode($ret[data][szamlazasi_adatok],true);
 
 		// Ha hiányzik az adat
-		if( (is_null($ret[szallitasi_adat]) || is_null($ret[szamlazasi_adat]) || !$this->validNAVFormat($ret[szallitasi_adat]) || !$this->validNAVFormat($ret[szamlazasi_adat]) ) && !$this->is_cp) 
+		if( (is_null($ret[szallitasi_adat]) || is_null($ret[szamlazasi_adat]) || !$this->validNAVFormat($ret[szallitasi_adat]) || !$this->validNAVFormat($ret[szamlazasi_adat]) ) && !$this->is_cp)
 		{
 			if( $_GET['safe'] !='1' ) {
 				$miss = '';
@@ -74,9 +79,9 @@ class Users
 		$check_watercard_data = $check_watercard->fetch(\PDO::FETCH_ASSOC);
 
 		$watercard[data] = $check_watercard_data;
-		$watercard[registered] = ( $check_watercard->rowCount() != 0 ) ? true : false; 
+		$watercard[registered] = ( $check_watercard->rowCount() != 0 ) ? true : false;
 		$watercard[aktiv] = false;
-			
+
 		if ( $this->checkWaterCardDiscount( $ret[data][ID] ) ) {
 			$arena_water_card = 25; // %
 			$ret['arena_water_card_kedvezmeny'] = $arena_water_card;
@@ -84,7 +89,7 @@ class Users
 
 			$torzsvasarloi_kedvezmeny = 0;
 		}
-		
+
 		$kedvezmenyek[] = array(
 			'nev' 			=> 'Törzsvásárlói kedvezmény',
 			'kedvezmeny' 	=> $torzsvasarloi_kedvezmeny,
@@ -106,10 +111,10 @@ class Users
 		$ret['torzsvasarloi_kedvezmeny_price_steps'] = $kedv[price_steps];
 
 		$ret['kedvezmeny'] = $torzsvasarloi_kedvezmeny + $arena_water_card;
-				
+
 		return $ret;
 	}
-	
+
 	private function validNAVFormat( $arr )
 	{
 		if(empty($arr['kozterulet_jellege'])) return false;
@@ -137,11 +142,11 @@ class Users
 
 	function resetPassword( $data ){
 		$jelszo =  rand(1111111,9999999);
-				
+
 		if(!$this->userExists('email',$data['email'])){
-			throw new \Exception('Hibás e-mail cím.',1001);		
+			throw new \Exception('Hibás e-mail cím.',1001);
 		}
-			
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'jelszo' => \Hash::jelszo($jelszo)
@@ -150,33 +155,33 @@ class Users
 		);
 
 		// Értesítő e-mail az új jelszóról
-		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );				
-		$mail->add( $data['email'] );	
+		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );
+		$mail->add( $data['email'] );
 		$arg = array(
 			'settings' 		=> $this->settings,
 			'infoMsg' 		=> 'Ezt az üzenetet a rendszer küldte. Kérjük, hogy ne válaszoljon rá!',
 			'jelszo' 		=> $jelszo
 		);
 		$mail->setSubject( 'Elkészült új jelszava' );
-		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_password_reset', $arg ) );			
+		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_password_reset', $arg ) );
 		$re = $mail->sendMail();
 	}
 
 	function getAllKedvezmeny(){
-		// Kedvezmény sávok		
-		$sv = "SELECT * FROM torzsvasarloi_kedvezmeny ORDER BY ar_from ASC;";	
-		
-		extract($this->db->q($sv,array('multi' => '1')));	
-		
+		// Kedvezmény sávok
+		$sv = "SELECT * FROM torzsvasarloi_kedvezmeny ORDER BY ar_from ASC;";
+
+		extract($this->db->q($sv,array('multi' => '1')));
+
 		return $data;
 	}
 
 	function getAllElorendelesiKedvezmeny(){
-		// Kedvezmény sávok		
-		$sv = "SELECT * FROM elorendelesi_kedvezmeny ORDER BY ar_from ASC;";	
-		
-		extract($this->db->q($sv,array('multi' => '1')));	
-		
+		// Kedvezmény sávok
+		$sv = "SELECT * FROM elorendelesi_kedvezmeny ORDER BY ar_from ASC;";
+
+		extract($this->db->q($sv,array('multi' => '1')));
+
 		return $data;
 	}
 
@@ -192,68 +197,68 @@ class Users
 		$price_steps = array();
 
 		if($userID == '') return $back;
-		$doneOrderID = $this->db->query("SELECT ID FROM order_allapot WHERE nev = 'Teljesítve';")->fetch(\PDO::FETCH_COLUMN); 
-		
+		$doneOrderID = $this->db->query("SELECT ID FROM order_allapot WHERE nev = 'Teljesítve';")->fetch(\PDO::FETCH_COLUMN);
+
 		// Korábban rendelt
 		$totalOrderPrice = (float) $this->db->query( $oc = "
-			SELECT 				sum((o.me * o.egysegAr)) as ar 
-			FROM 				`order_termekek` as o 
-			WHERE 				o.userID = $userID and  
-								datediff(now(),o.hozzaadva) <= 365  and 
+			SELECT 				sum((o.me * o.egysegAr)) as ar
+			FROM 				`order_termekek` as o
+			WHERE 				o.userID = $userID and
+								datediff(now(),o.hozzaadva) <= 365  and
 								(SELECT allapot FROM orders WHERE ID = o.orderKey) = 4
 		")->fetch(\PDO::FETCH_COLUMN);
 		$back['prev_paid'] += (int)$totalOrderPrice;
-		
+
 		// Hozzáadott érték növelés
 		$prev_total = $this->db->query("
-				SELECT 				min_ertek 
-				FROM 				torzsvasarlo_ertekek 
-				WHERE 				email = (SELECT email FROM felhasznalok WHERE ID = {$userID}) and 
+				SELECT 				min_ertek
+				FROM 				torzsvasarlo_ertekek
+				WHERE 				email = (SELECT email FROM felhasznalok WHERE ID = {$userID}) and
 									UNIX_TIMESTAMP() < ervenyes
 		;")->fetch(\PDO::FETCH_COLUMN);
-		
+
 		$back['prev_paid'] += (int)$prev_total;
 
 		if( $prev_total && $prev_total > 0 ) {
 			$totalOrderPrice += $prev_total ;
-		} 
+		}
 
 		// Kosár tartalma
 		/* * /
 		$cartPrice = $this->db->query( $iqq = "
-			SELECT 			sum(IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, getTermekAr(t.marka,IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))) * c.me) as cartPrice				 
-			FROM 			`shop_kosar` as c 
-			LEFT OUTER JOIN shop_termekek as t ON t.ID = c.termekID 
+			SELECT 			sum(IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, getTermekAr(t.marka,IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))) * c.me) as cartPrice
+			FROM 			`shop_kosar` as c
+			LEFT OUTER JOIN shop_termekek as t ON t.ID = c.termekID
 			WHERE 			c.gepID = ".\Helper::getMachineID().";")->fetch(\PDO::FETCH_COLUMN);
-		
+
 		if($cartPrice > 0){
 			$totalOrderPrice += $cartPrice;
 		}
 		/* */
 
-		// Kedvezmény sávok		
-		$sv = "SELECT ar_from, ar_to, kedvezmeny FROM torzsvasarloi_kedvezmeny ORDER BY ar_from ASC;";	
-		
+		// Kedvezmény sávok
+		$sv = "SELECT ar_from, ar_to, kedvezmeny FROM torzsvasarloi_kedvezmeny ORDER BY ar_from ASC;";
+
 		extract($this->db->q($sv,array('multi' => '1')));
 
-		foreach($data as $d){		
+		foreach($data as $d){
 
-			$from 	= (int)$d[ar_from];	
+			$from 	= (int)$d[ar_from];
 			$to 	= (int)$d[ar_to];
 			$k 		= (float)$d[kedvezmeny];
-			
+
 			if($to === 0) $to = 999999999;
-			
+
 			if($totalOrderPrice >= $from && $totalOrderPrice <= $to){
 				$kedv = $k;
 			}
 
-			$price_steps[] = $from;		
+			$price_steps[] = $from;
 		}
 		$price_steps[] = 999999999;
 
 		$step = -1;
-		foreach ($price_steps as $min ) {		
+		foreach ($price_steps as $min ) {
 			if( $step === -1 && $totalOrderPrice < $min ) {
 				$step = 0;
 				break;
@@ -266,9 +271,9 @@ class Users
 
 		$next_step_price = $price_steps[$step];
 
-		$back[szazalek] = $kedv;	
-		$back[next_price_step] = $next_step_price;	
-		$back[price_steps] = $price_steps;	
+		$back[szazalek] = $kedv;
+		$back[next_price_step] = $next_step_price;
+		$back[price_steps] = $price_steps;
 
 		return $back;
 	}
@@ -276,8 +281,8 @@ class Users
 	private function getPreorderKedvezmeny($userID){
 		$kedv = 0;
 		if($userID == '') return $kedv;
-		$doneOrderID = $this->db->query("SELECT ID FROM order_allapot WHERE nev = 'Teljesítve'")->fetch(\PDO::FETCH_COLUMN); 
-		
+		$doneOrderID = $this->db->query("SELECT ID FROM order_allapot WHERE nev = 'Teljesítve'")->fetch(\PDO::FETCH_COLUMN);
+
 		// Korábban rendelt
 		$totalOrderPrice = (float) $this->db->query("SELECT sum((o.me * o.egysegAr)) as ar FROM `order_termekek` as o WHERE o.userID = $userID and o.szuper_akcios = 0 and datediff(now(),o.hozzaadva) <= 365  and (SELECT allapot FROM orders WHERE ID = o.orderKey) = 4")->fetch(\PDO::FETCH_COLUMN);
 
@@ -285,38 +290,38 @@ class Users
 		// Kosár tartalma
 		$gepid = \Helper::getMachineID();
 		if( $gepid == '' || is_null($gepid) || !$gepid ) return 0;
-		
-		$cartPrice = $this->db->query( $iqq = "SELECT 
-				sum(IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, getTermekAr(t.marka,IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))) * c.me) as cartPrice				 
-			FROM `shop_kosar` as c 
-			LEFT OUTER JOIN shop_termekek as t ON t.ID = c.termekID 
-			WHERE 
+
+		$cartPrice = $this->db->query( $iqq = "SELECT
+				sum(IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, getTermekAr(t.marka,IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))) * c.me) as cartPrice
+			FROM `shop_kosar` as c
+			LEFT OUTER JOIN shop_termekek as t ON t.ID = c.termekID
+			WHERE
 				t.szuper_akcios = 0 and
 				c.gepID = ".$gepid.";")->fetch(\PDO::FETCH_COLUMN);
-		
+
 		if($cartPrice > 0){
 			$totalOrderPrice += $cartPrice;
 		}
 
-		// Kedvezmény sávok		
-		$sv = "SELECT * FROM elorendelesi_kedvezmeny ORDER BY ar_from ASC;";	
-		
+		// Kedvezmény sávok
+		$sv = "SELECT * FROM elorendelesi_kedvezmeny ORDER BY ar_from ASC;";
+
 		extract($this->db->q($sv,array('multi' => '1')));
-		
+
 		foreach($data as $d){
-			$from 	= (int)$d[ar_from];	
+			$from 	= (int)$d[ar_from];
 			$to 	= (int)$d[ar_to];
 			$k 		= (float)$d[kedvezmeny];
-			
+
 			if($to === 0) $to = 999999999;
-			
+
 			if($totalOrderPrice >= $from && $totalOrderPrice <= $to){
 				$kedv = $k;
-				break;	
+				break;
 			}
-			
+
 		}
-		
+
 		return $kedv;
 	}
 	private function getUser(){
@@ -327,7 +332,7 @@ class Users
 	function changeUserAdat($userID, $post){
 		extract($post);
 		if($nev == '') throw new \Exception('A neve nem lehet üress. Kérjük írja be a nevét!');
-		
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'nev' => $nev
@@ -340,9 +345,9 @@ class Users
 	function changeSzallitasiAdat($userID, $post){
 		extract($post);
 		unset($post[saveSzallitasi]);
-		
+
 		if($nev == '' || $city == '' || $irsz == '' || $uhsz == '' || $phone == '') throw new \Exception('Minden mező kitölétse kötelező!');
-		
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'szallitasi_adatok' => json_encode($post,JSON_UNESCAPED_UNICODE)
@@ -351,13 +356,13 @@ class Users
 		);
 		return "Változásokat elmentettük. <a href=''>Frissítés</a>";
 	}
-	
+
 	function changeSzamlazasiAdat($userID, $post){
 		extract($post);
 		unset($post[saveSzamlazasi]);
-		
+
 		if($nev == '' || $city == '' || $irsz == '' || $uhsz == '') throw new \Exception('Minden mező kitölétse kötelező!');
-		
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'szamlazasi_adatok' => json_encode($post,JSON_UNESCAPED_UNICODE)
@@ -366,28 +371,28 @@ class Users
 		);
 		return "Változásokat elmentettük. <a href=''>Frissítés</a>";
 	}
-	
+
 	function getOrders($userID, $arg = array()){
 		if($userID == '') return false;
 		$back = array(
 			'done' => array(),
 			'progress' => array()
 		);
-		
-		$q = "SELECT 
+
+		$q = "SELECT
 		o.*,
 		oa.nev as allapotNev,
 		oa.szin as allapotSzin,
 		(SELECT sum(me) FROM `order_termekek` where orderKey = o.ID) as itemNums,
 		(SELECT sum(me*egysegAr) FROM `order_termekek` where orderKey = o.ID) as totalPrice
-		FROM orders as o 
+		FROM orders as o
 		LEFT OUTER JOIN order_allapot as oa ON oa.ID = o.allapot
 		WHERE o.userID = $userID
 		ORDER BY o.allapot ASC, o.idopont ASC ";
-		
+
 		$arg[multi] = '1';
 		extract($this->db->q($q,$arg));
-		
+
 		foreach($data as $d){
 			if( $d[kedvezmeny_szazalek] > 0) {
 				$d[totalPrice] = $d[totalPrice] / ( $d[kedvezmeny_szazalek] / 100 + 1 ) ;
@@ -400,11 +405,11 @@ class Users
 				$back[progress][] = $d;
 			}
 		}
-		
-		
+
+
 		return $back;
 	}
-	
+
 	function changePassword($userID, $post){
 		extract($post);
 
@@ -412,14 +417,14 @@ class Users
 		if($old == '') throw new \Exception('Kérjük, adja meg az aktuálisan használt, régi jelszót!');
 		if($new == '' || $new2 == '') throw new \Exception('Kérjük, adja meg az új jelszavát!');
 		if($new !== $new2) throw new \Exception('A megadott jelszó nem egyezik, írja be újra!');
-		
+
 		$jelszo = \Hash::jelszo($old);
-		
+
 		$checkOld = $this->db->query("SELECT ID FROM ".self::TABLE_NAME." WHERE ID = $userID and jelszo = '$jelszo'");
 		if($checkOld->rowCount() == 0){
-			throw new \Exception('A megadott régi jelszó hibás. Póbálja meg újra!');	
+			throw new \Exception('A megadott régi jelszó hibás. Póbálja meg újra!');
 		}
-		
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'jelszo' => \Hash::jelszo($new2)
@@ -431,37 +436,37 @@ class Users
 	function getData($email){
 		if($email == '') return false;
 		$q = "SELECT * FROM ".self::TABLE_NAME." WHERE email = '$email'";
-		
+
 		extract($this->db->q($q));
-		
+
 		return $data;
 	}
-	
+
 	function login($data){
 		$re 	= array();
-		
+
 		if(!$this->userExists('email',$data['email'])){
-			throw new \Exception('Ezzel az e-mail címmel nem regisztráltak még!',1001);		
+			throw new \Exception('Ezzel az e-mail címmel nem regisztráltak még!',1001);
 		}
-		
+
 		if(!$this->validUser($data['email'],$data[pw])){
 			if($this->oldUser($data['email'])){
-				throw new \Exception('<h3>Weboldalunk megújult, ezért a régi jelszavát nem tudja használni tovább!</h3><br><strong>Jelszóemlékeztető segítségével kérhet új jelszót, amit az e-mail címére elküldünk!<br><a style="color:red;" href="/user/jelszoemlekezteto">ÚJ JELSZÓ MEAGADÁSÁHOZ KATTINTSON IDE!</a></strong>',9000);	
+				throw new \Exception('<h3>Weboldalunk megújult, ezért a régi jelszavát nem tudja használni tovább!</h3><br><strong>Jelszóemlékeztető segítségével kérhet új jelszót, amit az e-mail címére elküldünk!<br><a style="color:red;" href="/user/jelszoemlekezteto">ÚJ JELSZÓ MEAGADÁSÁHOZ KATTINTSON IDE!</a></strong>',9000);
 			}else {
-				throw new \Exception('Hibás bejelentkezési adatok!',9000);	
-			}	
+				throw new \Exception('Hibás bejelentkezési adatok!',9000);
+			}
 		}
-		
+
 		if(!$this->isActivated($data[email])){
 			$resendemailtext = '<form method="post" action=""><div class="text-form">Nem kapta meg az aktiváló e-mailt? <button name="activationEmailSendAgain" value="'.$data['email'].'" class="btn btn-sm btn-danger">Aktiváló e-mail újraküldése!</button></div></form>';
-			
-			throw new \Exception('A fiók még nincs aktiválva! <br>'.$resendemailtext ,1001);		
+
+			throw new \Exception('A fiók még nincs aktiválva! <br>'.$resendemailtext ,1001);
 		}
-		
+
 		if(!$this->isEnabled($data[email])){
-			throw new \Exception('A fiók felfüggesztésre került!',1001);		
+			throw new \Exception('A fiók felfüggesztésre került!',1001);
 		}
-				
+
 		// Refresh
 		$this->db->update(self::TABLE_NAME,
 			array(
@@ -473,7 +478,7 @@ class Users
 		$re[email] 	= $data[email];
 		$re[pw] 	= base64_encode( $data[pw] );
 		$re[remember] = ($data[remember_me] == 'on') ? true : false;
-		
+
 		\Session::set('user_email',$data[email]);
 
 		return $re;
@@ -483,17 +488,17 @@ class Users
 		$email 	= $activate_arr[0];
 		$userID = $activate_arr[1];
 		$pwHash = $activate_arr[2];
-		
+
 		if($email == '' || $userID == '' || $pwHash == '') throw new \Exception('Hibás azonosító');
-		
+
 		$q = $this->db->query("SELECT * FROM ".self::TABLE_NAME." WHERE ID = $userID and email = '$email' and jelszo = '$pwHash'");
-		
+
 		if($q->rowCount() == 0) throw new \Exception('Hibás azonosító');
-		
+
 		$d = $q->fetch(\PDO::FETCH_ASSOC);
-		
+
 		if(!is_null($d[aktivalva]))  throw new \Exception('A fiók már aktiválva van!');
-		
+
 		$this->db->update(self::TABLE_NAME,
 			array(
 				'aktivalva' => NOW
@@ -512,23 +517,23 @@ class Users
 			if ( !$is_activated ) {
 				$resendemailtext = '<form method="post" action=""><div class="text-form">Nem kapta meg az aktiváló e-mailt? <button name="activationEmailSendAgain" value="'.$data['email'].'" class="btn btn-sm btn-danger">Aktiváló e-mail újraküldése!</button></div></form>';
 			}
-			
+
 			throw new \Exception('Ezzel az e-mail címmel már regisztráltak! '.$resendemailtext,1002);
 		}
-		
+
 		// Szállítási és Számlázási adatok JSON kódja
 		$szamlazasi_keys = \Helper::getArrayValueByMatch($data,'szam_');
 		$szallitasi_keys = \Helper::getArrayValueByMatch($data,'szall_');
 
 		// Arena Water Card
-		$water_card = false;		
+		$water_card = false;
 		if( $data['watercard']['have'] ) {
 			if ( $data['watercard']['id'] == '' ) {
-				throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD kártya számát!" );				
+				throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD kártya számát!" );
 			}
 
 			if ( $data['watercard']['egyesulet'] == '' ) {
-				throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD egyesületét!" );				
+				throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD egyesületét!" );
 			}
 
 			$water_card['kartyaszam'] 	= $data['watercard']['id'];
@@ -559,43 +564,43 @@ class Users
 				)
 			);
 		}
-		
+
 		// Aktiváló e-mail kiküldése
 		$this->sendActivationEmail( $data['email'] );
 		if ( $water_card ) {
 			$this->sendWaterCardAlertEmail( $data, $water_card );
 		}
-		
-		// Feliratkozás 
+
+		// Feliratkozás
 		if ( $data['subscribe'] ) {
 			$this->Portal->feliratkozas( $data['nev'], $data['email'], 'regisztráció' );
 		}
-		
+
 		return $data;
 	}
 
 	public function registerWaterCard( $email, $id, $kartyaszam, $egyesulet )
 	{
 		if ( $email == '' ) {
-			throw new \Exception( "Hiányzik az Ön e-mail címe! Nem tudjuk regisztrálni az ARENA WATER CARD kártyáját!" );				
+			throw new \Exception( "Hiányzik az Ön e-mail címe! Nem tudjuk regisztrálni az ARENA WATER CARD kártyáját!" );
 		}
 
 		if ( $id == '' ) {
-			throw new \Exception( "Ismeretlen felhasználó! Nem tudjuk regisztrálni az ARENA WATER CARD kártyáját!" );				
+			throw new \Exception( "Ismeretlen felhasználó! Nem tudjuk regisztrálni az ARENA WATER CARD kártyáját!" );
 		}
 
 		if ( $kartyaszam == '' ) {
-			throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD kártya számát!" );				
+			throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD kártya számát!" );
 		}
 
 		if ( $egyesulet == '' ) {
-			throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD egyesületét!" );				
+			throw new \Exception( "Kérjük, hogy adja meg a A JÖVŐ BAJNOKAINAK / ARENA WATER CARD egyesületét!" );
 		}
 
 		$check = $this->db->query("SELECT 1 FROM arena_water_card WHERE kartya_szam = '$kartyaszam';");
 
 		if( $check->rowCount() != 0 ) {
-			throw new \Exception( "A megadott kártyaszámmal rendelkező ARENA WATER CARD kártyát már regisztrálták!" );		
+			throw new \Exception( "A megadott kártyaszámmal rendelkező ARENA WATER CARD kártyát már regisztrálták!" );
 		}
 
 		$this->db->insert( 'arena_water_card',
@@ -607,9 +612,9 @@ class Users
 			)
 		);
 
-		$this->sendWaterCardAlertEmail( 
-			array( 'nev' => $_POST[nev], 'email' => $_POST[watercard][email] ), 
-			array( 'egyesulet' => $egyesulet, 'kartyaszam' => $kartyaszam ) 
+		$this->sendWaterCardAlertEmail(
+			array( 'nev' => $_POST[nev], 'email' => $_POST[watercard][email] ),
+			array( 'egyesulet' => $egyesulet, 'kartyaszam' => $kartyaszam )
 		);
 	}
 
@@ -620,8 +625,8 @@ class Users
 		$activateKey = base64_encode(trim($email).'='.$data['ID'].'='.$data['jelszo']);
 
 		// Aktiváló e-mail kiküldése
-		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );				
-		$mail->add( $email );	
+		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );
+		$mail->add( $email );
 		$arg = array(
 			'nev' 			=> trim($data['nev']),
 			'settings' 		=> $this->settings,
@@ -629,15 +634,15 @@ class Users
 			'infoMsg' 		=> 'Ezt az üzenetet a rendszer küldte. Kérjük, hogy ne válaszoljon rá!'
 		);
 		$mail->setSubject( 'Regisztráció aktiválása' );
-		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_register_activating', $arg ) );			
+		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_register_activating', $arg ) );
 		$re = $mail->sendMail();
 	}
 
 	public function sendWaterCardAlertEmail( $post_data, $water_card )
 	{
 		// Aktiváló e-mail kiküldése ADMIN RÉSZÉRE
-		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );	
-		$mail->add( $this->settings['alert_email'] );	
+		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );
+		$mail->add( $this->settings['alert_email'] );
 		$arg = array(
 			'data' 			=> $post_data,
 			'wc' 			=> $water_card,
@@ -646,13 +651,13 @@ class Users
 			'infoMsg' 		=> 'Ezt az üzenetet a rendszer küldte. Kérjük, hogy ne válaszoljon rá!'
 		);
 		$mail->setSubject( 'Értesítés: Jövő Bajnokai kártya / Arena Water Card regisztráció igény' );
-		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'admin_user_register_watercard', $arg ) );			
+		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'admin_user_register_watercard', $arg ) );
 		$re = $mail->sendMail();
 
 
 		// Értesítő e-mail kiküldése FELHASZNÁLÓ RÉSZÉRE
-		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );	
-		$mail->add( $post_data[email] );	
+		$mail = new Mailer( $this->settings['page_title'], $this->settings['email_noreply_address'], $this->settings['mail_sender_mode'] );
+		$mail->add( $post_data[email] );
 		$arg = array(
 			'data' 			=> $post_data,
 			'wc' 			=> $water_card,
@@ -660,68 +665,68 @@ class Users
 			'infoMsg' 		=> 'Ezt az üzenetet a rendszer küldte. Kérjük, hogy ne válaszoljon rá!'
 		);
 		$mail->setSubject( 'Információ: Jövő Bajnokai kártya / Arena Water Card' );
-		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_register_watercard_info', $arg ) );			
+		$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'user_register_watercard_info', $arg ) );
 		$re = $mail->sendMail();
 	}
-	
+
 	function userExists($by = 'email', $val){
 		$q = "SELECT ID FROM ".self::TABLE_NAME." WHERE ".$by." = '".$val."'";
-		
+
 		$c = $this->db->query($q);
-		
+
 		if($c->rowCount() == 0){
-			return false;	
+			return false;
 		}else{
-			return true;	
+			return true;
 		}
 	}
 
 	function oldUser($email)
 	{
 		$q = "SELECT ID FROM ".self::TABLE_NAME." WHERE email = '".$email."' and old_user = 1 and jelszo = 'xxxx';";
-		
+
 		$c = $this->db->query($q);
-		
+
 		if($c->rowCount() == 0){
-			return false;	
+			return false;
 		}else{
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function isActivated($email){
 		$q = "SELECT ID FROM ".self::TABLE_NAME." WHERE email = '".$email."' and aktivalva IS NOT NULL";
-		
+
 		$c = $this->db->query($q);
-		
+
 		if($c->rowCount() == 0){
-			return false;	
+			return false;
 		}else{
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function isEnabled($email){
 		$q = "SELECT ID FROM ".self::TABLE_NAME." WHERE email = '".$email."' and engedelyezve = 1";
-		
+
 		$c = $this->db->query($q);
-		
+
 		if($c->rowCount() == 0){
-			return false;	
+			return false;
 		}else{
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function validUser($email, $password){
 		if($email == '' || $password == '') throw new \Exception('Hiányzó adatok. Nem lehet azonosítani a felhasználót!');
-		
+
 		$c = $this->db->query("SELECT ID FROM ".self::TABLE_NAME." WHERE email = '$email' and jelszo = '".\Hash::jelszo($password)."'");
-		
+
 		if($c->rowCount() == 0){
-			return false;	
+			return false;
 		}else{
-			return true;	
+			return true;
 		}
 	}
 
@@ -744,27 +749,27 @@ class Users
 					case 'nev':
 						$q .= " and ".$key." LIKE '".$v."%' ";
 					break;
-					default: 
+					default:
 						$q .= " and ".$key." = '".$v."' ";
-					break;	
+					break;
 				}
-				
-			}	
+
+			}
 		}
 		$q .= "
 		ORDER BY f.regisztralt DESC
 		";
 		$arg[multi] = "1";
-		extract($this->db->q($q, $arg));	
-		
+		extract($this->db->q($q, $arg));
+
 		$B = array();
 		foreach($data as $d){
 			$d[total_data] = $this->get(array( 'user' => $d['email'] ));
-			$B[] = $d; 	
+			$B[] = $d;
 		}
-		
+
 		$ret[data] = $B;
-		
+
 		return $ret;
 	}
 

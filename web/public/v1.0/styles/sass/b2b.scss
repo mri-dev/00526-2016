@@ -86,4 +86,17 @@ background: linear-gradient(to bottom,  #f9f9f9 0%,#e0e0e0 43%,#ffffff 81%); /* 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 
   }
+
+  &.dashboard-page {
+    .b2busertop{
+      border-bottom: 1px solid #dadada;
+      padding: 25px;
+      background: #f9f9f9;
+      
+      h1{
+        margin: 0;
+        font-size: 28px;
+      }
+    }
+  }
 }

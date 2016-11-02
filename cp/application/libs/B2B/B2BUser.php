@@ -156,6 +156,16 @@ class B2BUser extends B2BFactory
     return $this;
   }
 
+  public function getForWebsite( $id )
+  {
+    $ret = array();
+    $this->get( $id );
+
+    $ret['data'] = $this->data;
+
+    return $ret;
+  }
+
   public function save($post)
   {
     extract($post);

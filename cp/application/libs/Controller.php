@@ -1,4 +1,4 @@
-<?	
+<?
 use DatabaseManager\Database;
 
 use PortalManager\AdminUser;
@@ -32,6 +32,10 @@ class Controller {
         $this->gets 		= Helper::GET();
 
         //$this->memory_usage();
+        // B2B Logged state index
+        if (isset($_SESSION['b2buserid']) && !empty($_SESSION['b2buserid'])) {
+          define('B2BLOGGED', $_SESSION['b2buserid']);
+        }
 
         // CORE
        // $this->model 		= new Model();
@@ -43,23 +47,23 @@ class Controller {
         $this->view->gets 	= $this->gets;
 
         $this->AdminUser    = new AdminUser( array( 'db' => $this->db, 'view' => $this->view )  );
-        $this->User         = new Users(array( 
-                                            'db' => $this->db, 
-                                            'view' => $this->view, 
+        $this->User         = new Users(array(
+                                            'db' => $this->db,
+                                            'view' => $this->view,
                                             'admin' => $this->is_admin
                                         ));
-        $this->shop         = new Shop(array( 
-                                        'db' => $this->db, 
+        $this->shop         = new Shop(array(
+                                        'db' => $this->db,
                                         'view' => $this->view,
                                         'user' => $this->User->get()
                                     ));
-		
+
         $this->Portal       = new Portal( array( 'db' => $this->db, 'view' => $this->view )  );
         $this->captcha      = (new Captcha)
-                                ->init( 
-                                    $this->view->settings['recaptcha_public_key'], 
-                                    $this->view->settings['recaptcha_private_key'] 
-                                );        
+                                ->init(
+                                    $this->view->settings['recaptcha_public_key'],
+                                    $this->view->settings['recaptcha_private_key']
+                                );
         $this->Automailer   = new Automailer(array('db' => $this->db, 'settings' => $this->view->settings));
 
         $this->out( 'user', $this->User->get( self::$user_opt ) );
@@ -68,9 +72,9 @@ class Controller {
         $this->out( 'automailer', $this->Automailer);
 
         // Templates
-        $templates          = new Template( VIEW . 'templates/' );     
-        $this->out( 'templates', $templates );  
-        $this->out( 'highlight_text', $this->Portal->getHighlightItems() ); 
+        $templates          = new Template( VIEW . 'templates/' );
+        $this->out( 'templates', $templates );
+        $this->out( 'highlight_text', $this->Portal->getHighlightItems() );
 
         $lastnews_arg = array();
         $lastnews_arg['limit'] = 5;
@@ -105,11 +109,11 @@ class Controller {
               }
         }
 
-        if ( $_GET['msgkey'] ) {            
+        if ( $_GET['msgkey'] ) {
             $this->out( $_GET['msgkey'], Helper::makeAlertMsg('pSuccess', $_GET[$_GET['msgkey']]) );
         }
 
-        $this->out( 'states', array(              
+        $this->out( 'states', array(
             0=>"Bács-Kiskun",
             1=>"Baranya",
             2=>"Békés",
@@ -134,7 +138,7 @@ class Controller {
 
         $this->out( 'buyer_inputs_hints', $this->buyer_inputs_hints() );
         $this->out( 'kozterulet_jellege', $this->kozterulet_jellege() );
-			
+
         if(!$arg[hidePatern]){ $this->hidePatern = false; }
     }
 
@@ -169,7 +173,7 @@ class Controller {
         $this->view->called = $this->fnTemp;
     }
 
-    
+
 
     function setTitle($title){
         $this->view->title = $title;
@@ -195,7 +199,7 @@ class Controller {
 
         return $v;
     }
-    
+
     function setValtozok($key,$val){
         $iq = "UPDATE beallitasok SET bErtek = '$val' WHERE bKulcs = '$key'";
         $this->db->query($iq);
@@ -233,7 +237,7 @@ class Controller {
             'lepcsohaz' => 'Lépcsőház száma vagy betűjele.',
             'szint' => 'Az emelet száma.',
             'ajto' => 'Az ajtó száma.'
-        );   
+        );
 
         return $arr;
     }
@@ -421,23 +425,23 @@ class Controller {
             'üdülő-part',
             'üdülő-sor',
             'üdülő-telep',
-            ); 
+            );
 
         asort($arr);
         uasort($arr, array('Controller', 'Hcmp'));
-        
+
         return $arr;
     }
 
-    /** 
+    /**
     * Magyar ékezetes betűk korrigálás/rewrite rendezéshez
     * */
     static function Hcmp($a, $b)
     {
-      static $Hchr = array('á'=>'az', 'é'=>'ez', 'í'=>'iz', 'ó'=>'oz', 'ö'=>'ozz', 'ő'=>'ozz', 'ú'=>'uz', 'ü'=>'uzz', 'ű'=>'uzz', 'cs'=>'cz', 'zs'=>'zz', 
-       'ccs'=>'czcz', 'ggy'=>'gzgz', 'lly'=>'lzlz', 'nny'=>'nznz', 'ssz'=>'szsz', 'tty'=>'tztz', 'zzs'=>'zzzz', 'Á'=>'az', 'É'=>'ez', 'Í'=>'iz', 
-       'Ó'=>'oz', 'Ö'=>'ozz', 'Ő'=>'ozz', 'Ú'=>'uz', 'Ü'=>'uzz', 'Ű'=>'uzz', 'CS'=>'cz', 'ZZ'=>'zz', 'CCS'=>'czcz', 'GGY'=>'gzgz', 'LLY'=>'lzlz', 
-       'NNY'=>'nznz', 'SSZ'=>'szsz', 'TTY'=>'tztz', 'ZZS'=>'zzzz');  
+      static $Hchr = array('á'=>'az', 'é'=>'ez', 'í'=>'iz', 'ó'=>'oz', 'ö'=>'ozz', 'ő'=>'ozz', 'ú'=>'uz', 'ü'=>'uzz', 'ű'=>'uzz', 'cs'=>'cz', 'zs'=>'zz',
+       'ccs'=>'czcz', 'ggy'=>'gzgz', 'lly'=>'lzlz', 'nny'=>'nznz', 'ssz'=>'szsz', 'tty'=>'tztz', 'zzs'=>'zzzz', 'Á'=>'az', 'É'=>'ez', 'Í'=>'iz',
+       'Ó'=>'oz', 'Ö'=>'ozz', 'Ő'=>'ozz', 'Ú'=>'uz', 'Ü'=>'uzz', 'Ű'=>'uzz', 'CS'=>'cz', 'ZZ'=>'zz', 'CCS'=>'czcz', 'GGY'=>'gzgz', 'LLY'=>'lzlz',
+       'NNY'=>'nznz', 'SSZ'=>'szsz', 'TTY'=>'tztz', 'ZZS'=>'zzzz');
        $a = strtr($a,$Hchr);   $b = strtr($b,$Hchr);
        $a=strtolower($a); $b=strtolower($b);
        return strcmp($a, $b);
@@ -456,7 +460,7 @@ class Controller {
             # Render FOOTER
             $this->view->render($subfolder.$this->theme_wire.'footer',$mode);
         }
-        $this->db = null;         
+        $this->db = null;
        // $this->memory_usage();
 
         $this->finish_time = microtime(true);
