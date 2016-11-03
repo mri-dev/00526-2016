@@ -161,7 +161,10 @@ class B2BUser extends B2BFactory
     $ret = array();
     $this->get( $id );
 
+    $ret['email'] = $this->data['email'];
     $ret['data'] = $this->data;
+    $ret['szamlazasi_adat'] = json_decode($this->data['szamlazasi_adatok'], true);
+    $ret['szallitasi_adat'] = json_decode($this->data['szallitasi_adatok'], true);
 
     return $ret;
   }

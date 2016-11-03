@@ -1,5 +1,11 @@
 $blue: #0cbded;
 
+body.b2blogged{
+  .highlight-view{
+    display: none;
+  }
+}
+
 .b2b-view{
   &.login-page{
     .info-block{
@@ -88,14 +94,82 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', end
   }
 
   &.dashboard-page {
-    .b2busertop{
-      border-bottom: 1px solid #dadada;
+
+    .b2busertop {
+      border-bottom: 2px solid #cc2727;
       padding: 25px;
-      background: #f9f9f9;
-      
+      background: #02536b;
+
       h1{
         margin: 0;
-        font-size: 28px;
+        font-size: 26px;
+        font-weight: bold;
+        color: white;
+
+        strong{
+          font-size: 14px;
+          position: relative;
+          margin-left: 25px;
+          color: #0ac8ff;
+
+          &:before {
+            content:"";
+            position: absolute;
+            border-left: 1px solid #76e0ff;
+            height: 40px;
+            left: -16px;
+            top: -15px;
+            -webkit-transform: rotate(30deg);
+            -moz-transform: rotate(30deg);
+            transform: rotate(30deg);
+          }
+        }
+      }
+    }
+
+    .fullwidth-container {
+      .sidebarmenu{
+        float: left;
+        width: 15%;
+
+        ul{
+          li{
+            a{
+              padding: 10px;
+              margin: 10px 0;
+              display: block;
+              background: #f1f1f1;
+              text-transform: uppercase;
+              color: black;
+
+              i{
+                width: 25px;
+                text-align: center;
+              }
+              &:hover{
+                background: #eaeaea;
+              }
+            }
+            &.on {
+              a {
+                background: $blue;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+      .b2b-content-holder{
+        float: left;
+        width: 85%;
+        .b2b-content-wrapper{
+          padding: 20px;
+
+          h1{
+            color: #8c8c8c;
+            margin: 0 0 30px 0;
+          }
+        }
       }
     }
   }

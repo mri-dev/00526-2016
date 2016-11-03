@@ -53,6 +53,11 @@ class b2b extends Controller{
 			$this->view->SEOSERVICE = $SEO;
 		}
 
+		public function beallitasok()
+		{
+			# code...
+		}
+
 		public function logout()
 		{
 			unset($_SESSION['b2buserid']);

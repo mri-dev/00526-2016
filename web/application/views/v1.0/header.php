@@ -18,7 +18,7 @@
 	</script>
 	<? endif; ?>
 </head>
-<body>
+<body class="<?=(defined('B2BLOGGED'))?'b2blogged':''?>">
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
