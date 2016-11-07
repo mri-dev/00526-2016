@@ -250,7 +250,7 @@ class gateway extends Controller
 					->setJSONPrefix( 'json=' )
 					->setPort( 999 )
 					->setTimeout( 120 )
-					->setDebug(true)
+					->setDebug(false)
 					->send();
 
 					echo '<pre>';
@@ -305,6 +305,7 @@ class gateway extends Controller
 								foreach ( $article->variants as $variant ) {
 									$in = array();
 
+									$in[b2b] = ($article->article->onlyb2b) ? 1 : 0;
 									$in[articleid] = $article->article->articleid;
 									$in[name] = $article->article->name;
 									$in[number] = $article->article->number;
@@ -316,6 +317,7 @@ class gateway extends Controller
 									$in[size_name] = $variant->size;
 									$in[netprice] = $variant->netprice;
 									$in[grossprice] = $variant->grossprice;
+									$in[b2bprice] = $variant->b2bprice;
 
 									$cats = array();
 									foreach ( $article->categories as $cat ) {
@@ -401,6 +403,7 @@ class gateway extends Controller
 
 					$step = 0;
 					foreach ( $articles as $article ) {
+						//if ($step >=20 ) {	break; }
 
 						if( count( $article->categories ) === 0 ){
 							continue;
@@ -409,6 +412,7 @@ class gateway extends Controller
 						foreach ( $article->variants as $variant ) {
 							$in = array();
 
+							$in[b2b] = ($article->article->onlyb2b) ? 1 : 0;
 							$in[articleid] = $article->article->articleid;
 							$in[name] = $article->article->name;
 							$in[number] = $article->article->number;
@@ -420,6 +424,7 @@ class gateway extends Controller
 							$in[size_name] = $variant->size;
 							$in[netprice] = $variant->netprice;
 							$in[grossprice] = $variant->grossprice;
+							$in[b2bprice] = $variant->b2bprice;
 
 							$cats = array();
 							foreach ( $article->categories as $cat ) {
@@ -445,14 +450,13 @@ class gateway extends Controller
 					echo '<pre>';
 					print_r( $ic );
 					echo '</pre>';
-					/* */
-
 					return false;
+					/* */
 
 					try {
 						// Frissítendő termékek frissítése
 						if (  isset($ic['total_need_update']) && $ic['total_need_update'] > 0 ) {
-							 $this->Admin->importProducts_test(  $ic, array( 'mode' => 'update', 'dont_connect_images' => true ) );
+							 $this->Admin->importProducts(  $ic, array( 'mode' => 'update', 'dont_connect_images' => true ) );
 						}
 
 						// Új termékek importálása
