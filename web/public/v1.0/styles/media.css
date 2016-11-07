@@ -3310,8 +3310,9 @@ a.add-water-card {
 
 input + .text-hint {
 	font-size: 0.7em;
-    color: #c1c1c1;
-    font-weight: 300;
+  color: #c1c1c1;
+  font-weight: 300;
+  margin-top: 3px;
 }
 
 
