@@ -1,5 +1,6 @@
 <?
 use B2B\B2BAuth;
+use B2B\B2BUser;
 
 class b2b extends Controller{
 		const SESSION_URL_TIMEOUT_SEC = 60;
@@ -55,7 +56,52 @@ class b2b extends Controller{
 
 		public function beallitasok()
 		{
-			# code...
+			$user = new B2BUser( $this->db );
+			$user->get( $this->view->user['data']['ID'] );
+
+			// Törzsadat
+			if (Post::on('saveTorzs')) {
+				try{
+					unset($_POST['saveTorzs']);
+					$user->save($_POST);
+					Helper::reload('/b2b/beallitasok?saved=torzs');
+				}catch(Exception $e){
+					$this->view->err = true;
+					$this->view->rmsg['torzs'] = Helper::makeAlertMsg('pError',$e->getMessage());
+				}
+			}
+
+			// Számlázás
+			if (Post::on('saveSzamlazasi')) {
+				try{
+					unset($_POST['saveSzamlazasi']);
+					$post = array(
+						'szamlazas' => $_POST
+					);
+					$user->save($post);
+					Helper::reload('/b2b/beallitasok?saved=szamlazas');
+				}catch(Exception $e){
+					$this->view->err = true;
+					$this->view->rmsg['torzs'] = Helper::makeAlertMsg('pError',$e->getMessage());
+				}
+			}
+
+			// Szállítás
+			if (Post::on('saveSzallitasi')) {
+				try{
+					unset($_POST['saveSzallitasi']);
+					$post = array(
+						'szallitas' => $_POST
+					);
+					$user->save($post);
+					Helper::reload('/b2b/beallitasok?saved=szallitas');
+				}catch(Exception $e){
+					$this->view->err = true;
+					$this->view->rmsg['torzs'] = Helper::makeAlertMsg('pError',$e->getMessage());
+				}
+			}
+
+
 		}
 
 		public function logout()

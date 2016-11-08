@@ -15,11 +15,11 @@
   );
 ?>
 <h1>Beállítások</h1>
-<?=$this->rmsg?>
 <div class="row">
   <form action="" method="post">
     <div class="col-md-12">
       <h3>Törzsadatok</h3>
+      <?=($_GET['saved'] == 'torzs') ? \Helper::makeAlertMsg('pSuccess', 'Változások mentésre kerültek.') : ( ($this->rmsg['torzs']) ? $this->rmsg['torzs'] : '' )?>
       <div class="row">
         <div class="col-md-3">
           <label for="nev">Cég neve</label>
@@ -60,6 +60,7 @@
   <form action="" method="post">
     <div class="col-md-6">
       <h3>Számlázási adatok</h3>
+      <?=($_GET['saved'] == 'szamlazas') ? \Helper::makeAlertMsg('pSuccess', 'Változások mentésre kerültek.') : ( ($this->rmsg['torzs']) ? $this->rmsg['torzs'] : '' )?>
       <form action="#szamlazasi" method="post">
       <? foreach($szmnev as $dk => $dv):
         $val = ($this->user[szamlazasi_adat]) ? $this->user[szamlazasi_adat][$dk] : '';
@@ -95,6 +96,7 @@
     </div>
     <div class="col-md-6">
       <h3>Szállítási adatok</h3>
+      <?=($_GET['saved'] == 'szallitas') ? \Helper::makeAlertMsg('pSuccess', 'Változások mentésre kerültek.') : ( ($this->rmsg['torzs']) ? $this->rmsg['torzs'] : '' )?>
       <form action="#szallitasi" method="post">
       <? foreach($szmnev as $dk => $dv):
           $val = ($this->user[szallitasi_adat]) ? $this->user[szallitasi_adat][$dk] : '';

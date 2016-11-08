@@ -174,8 +174,13 @@ class B2BUser extends B2BFactory
     extract($post);
     $excp = array();
 
-    $post['szamlazasi_adatok'] = json_encode($post['szamlazas'], \JSON_UNESCAPED_UNICODE);
-    $post['szallitasi_adatok'] = json_encode($post['szallitas'], \JSON_UNESCAPED_UNICODE);
+    if (isset($post['szamlazas'])) {
+      $post['szamlazasi_adatok'] = json_encode($post['szamlazas'], \JSON_UNESCAPED_UNICODE);
+    }
+    if (isset($post['szallitas'])) {
+      $post['szallitasi_adatok'] = json_encode($post['szallitas'], \JSON_UNESCAPED_UNICODE);
+    }
+
     unset($post['szallitas']);
     unset($post['szamlazas']);
 
