@@ -416,6 +416,16 @@ class Products
 
 		$admin_listing = ( $arg['admin'] ) ? true : false;
 
+		// Price
+		if ( $arg['b2b'] === true ) {
+			$price_qry = "getB2BTermekAr(p.marka, p.b2b_netto_ar)";
+		}
+		else
+		{
+			$price_qry = "getTermekAr(p.marka, IF(p.akcios,p.akcios_brutto_ar,p.brutto_ar))";
+		}
+
+
 		/*==========  Lekérdezés  ==========*/
 		$qry = "
 		SELECT SQL_CALC_FOUND_ROWS
@@ -430,6 +440,8 @@ class Products
 			p.brutto_ar,
 			p.akcios_netto_ar,
 			p.akcios_brutto_ar,
+			p.b2b_netto_ar,
+			p.b2b_brutto_ar,
 			p.egyedi_ar,
 			p.marka as marka_id,
 			p.szallitasID,
@@ -443,7 +455,7 @@ class Products
 			p.meret,
 			IF(p.egyedi_ar IS NOT NULL,
 				p.egyedi_ar,
-				getTermekAr(p.marka, IF(p.akcios,p.akcios_brutto_ar,p.brutto_ar))
+				".$price_qry."
 			) as ar,
 			(SELECT GROUP_CONCAT(t.meret) FROM shop_termek_kapcsolatok as tk LEFT OUTER JOIN shop_termekek as t ON t.ID = tk.termek_to WHERE tk.termek_from = p.ID) as sizes,
 			p.fotermek,
@@ -685,16 +697,22 @@ class Products
 
 		$bdata = array();
 
-		foreach($data as $d){
-			$brutto_ar 			= $d['brutto_ar'];
-			$akcios_brutto_ar 	= $d['akcios_brutto_ar'];
+		foreach($data as $d)
+		{
+			$b2b_ar = $d['b2b_netto_ar'];
+			$brutto_ar = $d['brutto_ar'];
+			$akcios_brutto_ar = $d['akcios_brutto_ar'];
 
 			$kep = $d['profil_kep'];
 			$d['profil_kep'] 		=  \PortalManager\Formater::productImage( $kep, false, self::TAG_IMG_NOPRODUCT );
 			$d['profil_kep_small'] 	=  \PortalManager\Formater::productImage( $kep, 75, self::TAG_IMG_NOPRODUCT );
 
-			$arInfo 		= $this->getProductPriceCalculate( $d['marka_id'], $brutto_ar );
-			$akcios_arInfo 	= $this->getProductPriceCalculate( $d['marka_id'], $akcios_brutto_ar );
+			if ($arg['b2b'] === true) {
+				$arInfo 		= $this->getProductPriceCalculate( $d['marka_id'], $b2b_ar, true);
+			} else {
+				$arInfo 		= $this->getProductPriceCalculate( $d['marka_id'], $brutto_ar );
+				$akcios_arInfo 	= $this->getProductPriceCalculate( $d['marka_id'], $akcios_brutto_ar );
+			}
 
 			if( $d['akcios'] == '1') {
 				$arInfo['ar'] = $arInfo['ar'];
@@ -731,13 +749,20 @@ class Products
 		return ($this->products_number == 0) ? false : true;
 	}
 
-	private function getProductPriceCalculate($markaID, $bruttoAr){
+	private function getProductPriceCalculate($markaID, $bruttoAr, $b2b = false ){
 		$re 	  = array();
 		$re[info] =  array();
 		$re[arres] = 0;
 		$re[ar]   =  $bruttoAr;
 
 		if(empty($markaID)) return false;
+
+		if ($b2b) {
+			$re[info] 	= 'B2B';
+			$re[arres] 	= 0;
+			$re[ar] 	= $bruttoAr;
+			return $re;
+		}
 
 		// Márka adatok
 		$marka = $this->db->query("SELECT fix_arres FROM shop_markak WHERE ID = $markaID")->fetch(\PDO::FETCH_ASSOC);
@@ -1119,7 +1144,7 @@ class Products
 
 		$data = $q->fetch(\PDO::FETCH_ASSOC);
 
-
+		$b2b_ar 			= $data['b2b_netto_ar'];
 		$brutto_ar 			= $data['brutto_ar'];
 		$akcios_brutto_ar 	= $data['akcios_brutto_ar'];
 
@@ -1127,8 +1152,12 @@ class Products
 		$data['profil_kep'] 		=  \PortalManager\Formater::productImage( $kep, false, self::TAG_IMG_NOPRODUCT );
 		$data['profil_kep_small'] 	=  \PortalManager\Formater::productImage( $kep, 75, self::TAG_IMG_NOPRODUCT );
 
-		$arInfo 		= $this->getProductPriceCalculate( $data['marka'], $brutto_ar );
-		$akcios_arInfo 	= $this->getProductPriceCalculate( $data['marka'], $akcios_brutto_ar );
+		if ($opt['b2b'] === true) {
+			$arInfo 		= $this->getProductPriceCalculate( $data['marka'], $b2b_ar, true );
+		} else {
+			$arInfo 		= $this->getProductPriceCalculate( $data['marka'], $brutto_ar );
+			$akcios_arInfo 	= $this->getProductPriceCalculate( $data['marka'], $akcios_brutto_ar );
+		}
 
 		if( $d['akcios'] == '1') {
 			$arInfo['ar'] = $arInfo['ar'];
@@ -1138,7 +1167,7 @@ class Products
 		$akcios_arInfo['ar'] 	= ($this->settings['round_price_5'] == '1') ? round($akcios_arInfo['ar'] / 5) * 5 : $akcios_arInfo['ar'] ;
 
 		$data['rovid_leiras'] 		= $this->addLinkToString( $data, $data['rovid_leiras'] );
-		$data['ar'] 				= $arInfo['ar'];
+		$data['ar'] 							= $arInfo['ar'];
 		$data['akcios_fogy_ar']		= $akcios_arInfo['ar'];
 		$data['arres_szazalek'] 	= $arInfo['arres'];
 		$data['hasonlo_termek_ids'] = $this->getProductRelatives( $product_id );

@@ -71,6 +71,8 @@ class Controller {
         $this->Automailer->Start($this->view->user);
         $this->out( 'automailer', $this->Automailer);
 
+        $this->out( 'price_netbr', (defined("B2BLOGGED")?'nettó':'bruttó') );
+
         // Templates
         $templates          = new Template( VIEW . 'templates/' );
         $this->out( 'templates', $templates );
