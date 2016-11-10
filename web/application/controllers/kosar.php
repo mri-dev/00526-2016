@@ -69,6 +69,11 @@ class kosar extends Controller{
 				$this->view->canOrder = false;
 			}*/
 
+			if( !empty($this->view->kosar[overStock]) ) {
+				$this->view->canOrder = false;
+				$this->view->not_reached_min_price_text = 'Az Ön kosarában '.count($this->view->kosar[overStock]).' db olyan tétel van, ahol többet szeretne vásárolni, mint amennyi jelenleg készleten van! Csökkentse a mennyiséget a maximálisan megrendelhető mennyiségre.';
+			}
+
 			if(Post::on('orderState')){
 				try{
 					$step = $this->shop->doOrder($_POST, array( 'user' => $this->view->user ));

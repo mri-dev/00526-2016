@@ -55,15 +55,19 @@
 											<div class="sel-types">
 												<? if($d['meret']): ?><em>Méret:</em> <strong><?=$d['meret']?></strong><? endif;?>
 												<? if($d['szin']): ?><em>Szín:</em> <strong><?=$d['szin']?></strong><? endif;?>
+
 											</div>
 											<div class="subLine">
 												<span title="Termék elérhetősége"><i class="fa fa-truck"></i> <?=$d[allapot]?></span> |
 												<span title="Kiszállítási idő"><i class="fa fa-clock-o"></i> <?=$d[szallitasIdo]?></span>
+												<? if(defined("B2BLOGGED")): ?>
+												| <span class="stock stock-<?=($d['raktar_keszlet'] > 0)?'more':'none'?>">Készleten: <strong><?=$d['raktar_keszlet']?> db</strong></span>
+												<? endif; ?>
 											</div>
 
 										</div>
 									</td>
-									<td class="center"><span><?=$d[me]?> db</span></td>
+									<td class="center"><span><?=$d[me]?> db</span><? if($d['me'] > $d['raktar_keszlet']): ?><div class="over-me-stock"><i class="fa fa-exclamation-triangle"></i> max. <?=$d['raktar_keszlet']?> db</div><? endif; ?></td>
 									<td class="center"><span><?=Helper::cashFormat($d[ar])?> Ft</span></td>
 									<td class="center"><span class="cash"><strong><?=Helper::cashFormat($d[sum_ar])?> Ft</strong></span></td>
 									<td class="center action">
@@ -709,7 +713,7 @@
 	                                </div>
 	                            	<div class="p">
 	                                	<span class="n">Szállítási költség:</span>
-	                                    <span class="a"><span class="ar"><?=($szallitasiKoltseg > 0)?'+'.Helper::cashFormat($szallitasiKoltseg):'0'?></span> Ft</span>
+	                                    <span class="a"><span class="ar"><?=($szallitasiKoltseg > 0)?'+'.Helper::cashFormat($szallitasiKoltseg):'0'?></span> Ft<?=(defined("B2BLOGGED"))?'*':''?></span>
 	                                </div>
 	                                <div class="p end">
 	                                	<?
@@ -731,6 +735,13 @@
 	                        </div>
 	                        <? endif; ?>
 	                        <div class="col-sm-12">
+														<?php if (defined("B2BLOGGED")): ?>
+															<input type="hidden" name="b2b" value="1">
+															<div class="divider"></div>
+															<div class="b2b-trans-info">
+																* FIGYELEM! A szállítási költség a megrendelés után változhat. A költség függ a megrendelt tételek jellegétől (mennyiségtől, súlytól), hogy milyen módon és formában tudjuk biztonságosan kiszállítani!
+															</div>
+														<?php endif; ?>
 	                        	<div class="divider"></div>
 	                        	<? if(false): ?>
                        			<div class="left"><input type="checkbox" checked="checked" id="subscribe" name="subscribe" /><label for="subscribe">Felirakozok hírlevélre!</label></div>

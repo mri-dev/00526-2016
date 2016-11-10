@@ -926,6 +926,15 @@ class Shop
 
 		$c = $this->db->query("SELECT me FROM shop_kosar WHERE termekID = $termekID and gepID = $mid;")->fetch(\PDO::FETCH_ASSOC);
 
+		$tdd = $this->db->query("SELECT raktar_keszlet FROM shop_termekek WHERE ID = $termekID and lathato = 1;")->fetch(\PDO::FETCH_ASSOC);
+
+		$curme 	= ($c) ? (int)$c[me] : 0;
+		$left 	= (int)$tdd['raktar_keszlet'];
+
+		if ( ($curme + 1) > $left) {
+			throw new \Exception('Maximum '.$tdd['raktar_keszlet'].' darabot rendelhet jelenleg!');
+		}
+
 		$this->db->query("UPDATE shop_kosar SET me = me + 1  WHERE termekID = $termekID and gepID = $mid");
 	}
 	public function clearCart($mid){
@@ -957,10 +966,10 @@ class Shop
 		$ci = $this->db->query("SELECT ID, me FROM shop_kosar WHERE termekID = $termekID and gepID = $mid;");
 		$cid = $ci->fetch(\PDO::FETCH_ASSOC);
 
+		$tdd = $this->db->query("SELECT raktar_keszlet FROM shop_termekek WHERE ID = $termekID and lathato = 1;")->fetch(\PDO::FETCH_ASSOC);
+
 		$curme 	= ($cid) ? (int)$cid[me] : 0;
 		$left 	= (int)$tdd['raktar_keszlet'] - $curme;
-
-		$tdd = $this->db->query("SELECT raktar_keszlet FROM shop_termekek WHERE ID = $termekID and lathato = 1;")->fetch(\PDO::FETCH_ASSOC);
 
 		if ($me > $left) {
 			throw new \Exception('Maximum '.$tdd['raktar_keszlet'].' darabot rendelhet jelenleg!');
@@ -1002,6 +1011,7 @@ class Shop
 		$re 		= array();
 		$itemNum 	= 0;
 		$totalPrice = 0;
+		$overStock = array();
 
 		if(empty($mid) || $mid == '' || !$mid) return false;
 
@@ -1027,6 +1037,7 @@ class Shop
 			t.nev as termekNev,
 			t.szin,
 			t.meret,
+			t.raktar_keszlet,
 			getTermekUrl(t.ID,'".DOMAIN."') as url,
 			ta.elnevezes as allapot,
 			t.profil_kep,
@@ -1059,12 +1070,17 @@ class Shop
 
 			$d['profil_kep'] = \PortalManager\Formater::productImage( $d['profil_kep'] );
 
+			if ($d['me'] > $d['raktar_keszlet']) {
+				$overStock[] = $d['termekID'];
+			}
+
 			$dt[] = $d;
 		}
 
+		$re[overStock]			= $overStock;
 		$re[itemNum]			= $itemNum;
-		$re[totalPrice]			= $totalPrice;
-		$re[totalPriceTxt]		= number_format($totalPrice,0,""," ");
+		$re[totalPrice]		= $totalPrice;
+		$re[totalPriceTxt]= number_format($totalPrice,0,""," ");
 		$re[items] 				= $dt;
 
 		return $re;
