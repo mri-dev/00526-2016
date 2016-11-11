@@ -2812,7 +2812,7 @@ input[type=checkbox]:checked + label:before {
 }
 
 #PayUForm button {
-	background: url("http://arena-src.wwwsoft.tk/images/payu_pay_btn_medium.jpg") no-repeat;
+	background: url("//cp.arena.hu/images/payu_pay_btn_medium.jpg") no-repeat;
 	width: 234px;
 	height: 50px;
 	border:none;

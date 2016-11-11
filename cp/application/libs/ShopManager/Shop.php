@@ -1859,6 +1859,13 @@ class Shop
 					$total 	= 0;
 					$pppkod = ($ppp_uzlet_str) ? $ppp_uzlet_str : 'NULL';
 					$pp_pont= ($pp_selected_point) ? $pp_selected_point : 'NULL';
+					$b2b = (isset($b2b)) ? 1 : 0;
+
+					if ( isset($b2b) ) {
+						$price_qry = 'getB2BTermekAr(t.marka, t.b2b_netto_ar)';
+					}else{
+						$price_qry = 'getTermekAr(t.marka, IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))';
+					}
 
 					$cart = array();
 					$cart_data = $this->db->query("
@@ -1868,13 +1875,16 @@ class Shop
 							t.meret,
 							t.szin,
 							getTermekUrl(t.ID,'".$this->settings['domain']."') as url,
-							IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, getTermekAr(t.marka, IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))) as ar,
+							IF(t.egyedi_ar IS NOT NULL, t.egyedi_ar, ".$price_qry.") as ar,
 							m.neve as markaNev
 						FROM shop_kosar as c
 						LEFT OUTER JOIN shop_termekek as t ON t.ID = c.termekID
 						LEFT OUTER JOIN shop_markak as m ON m.ID = t.marka
 						WHERE c.gepID = $mid");
 					$cart = $cart_data->fetchAll(\PDO::FETCH_ASSOC);
+
+					/*print_r($cart);
+					exit;*/
 
 					if( count($cart) == 0 ){
 						return false;
@@ -1884,7 +1894,7 @@ class Shop
 					if($go){
 						$szamlazasi_keys = \Helper::getArrayValueByMatch($post,'szam_');
 						$szallitasi_keys = \Helper::getArrayValueByMatch($post,'szall_');
-						$iq = "INSERT INTO orders(nev,azonosito,email,userID,gepID,szallitasiModID,fizetesiModID,kedvezmeny_szazalek,szallitasi_koltseg,szamlazasi_keys,szallitasi_keys,pickpackpont_uzlet_kod,comment,postapont) VALUES(
+						$iq = "INSERT INTO orders(nev,azonosito,email,userID,gepID,szallitasiModID,fizetesiModID,kedvezmeny_szazalek,szallitasi_koltseg,szamlazasi_keys,szallitasi_keys,pickpackpont_uzlet_kod,comment,postapont,b2b) VALUES(
 						'$nev',
 						nextOrderID(),
 						'$email',
@@ -1898,7 +1908,8 @@ class Shop
 						'".json_encode($szallitasi_keys,JSON_UNESCAPED_UNICODE)."',
 						'$pppkod',
 						'$comment',
-						'$pp_pont'
+						'$pp_pont',
+						'$b2b'
 						);";
 
 						$this->db->query($iq);
@@ -1984,7 +1995,7 @@ class Shop
 							'orderID' 		=> $orderID,
 							'megjegyzes' 	=> $comment
 						);
-						$mail->setSubject( 'Értesítő: Új megrendelés érkezett' );
+						$mail->setSubject( ( ($b2b == 1) ? 'B2B ' : '' ).'Értesítő: Új'.( ($b2b == 1) ? ' B2B' : '' ).' megrendelés érkezett' );
 						$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'order_new_admin', $arg ) );
 						$re = $mail->sendMail();
 

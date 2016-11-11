@@ -123,13 +123,16 @@
 					<? if( $this->orderInfo['fizetesiModID'] == $this->settings['flagkey_pay_payu'] && $this->orderInfo['payu_fizetve'] == 0 ): ?>
 						<br>
 						<strong>Online bankkártyás fizetés indítása: </strong><br>
-						<?=$this->payu_btn?>
+						<?php if (defined("B2BLOGGED")): ?>
+							<strong style="color:#ff6e00;">A kártyás fizetést akkor teljesítheti, ha feldolgoztuk megrendelését és a megrendelés állapotát "Fizetésre vár" állapotra változtatjuk.</strong><br>
+
+						<?php else: ?>
+							<?=$this->payu_btn?>
+						<?php endif; ?>
 					<? endif; ?>
 
 					<? // PayPal fizetés
 					if($this->fizetes[Helper::getFromArrByAssocVal($this->fizetes,'ID',$this->orderInfo[fizetesiModID])][nev] == 'PayPal' && $this->orderInfo[paypal_fizetve] == 0):
-
-
 					?>
 						<div style="padding:10px 0;">
 
