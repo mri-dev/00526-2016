@@ -169,6 +169,32 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', end
             color: #8c8c8c;
             margin: 0 0 30px 0;
           }
+
+          .order-table{
+            .header{
+              padding: 0 15px;
+              font-size: 0.8em;
+              color: #c1c1c1;
+              text-transform: uppercase;
+
+              line-height: 1;
+              & div[class*=col-]{
+                & > div{
+                  padding: 8px;
+                  text-align: center;
+                }
+              }
+            }
+            .main-ord-row{
+              border: 1px solid #f1f1f1;
+              padding: 8px;
+              margin: 5px 0;
+            }
+
+            .info-row{
+              display: none;
+            }
+          }
         }
       }
     }

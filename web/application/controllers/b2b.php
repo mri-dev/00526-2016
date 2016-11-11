@@ -1,11 +1,15 @@
 <?
 use B2B\B2BAuth;
 use B2B\B2BUser;
+use B2B\B2BOrders;
 
 class b2b extends Controller{
 		const SESSION_URL_TIMEOUT_SEC = 60;
 		function __construct(){
 			parent::__construct();
+
+			$orders = new B2BOrders( $this->view->user['data']['ID'], $this->db );
+			$this->out( 'orders', $orders );
 
 			if(isset($_GET['validAuth']))
 			{

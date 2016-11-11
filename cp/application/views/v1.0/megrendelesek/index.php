@@ -20,7 +20,7 @@ $nevek = array(
     <a href="/<?=$this->gets[0]?>/allapotok" class="btn btn-default"><i class="fa fa-bars"></i> Megrendelés állapotok</a>
     <a href="/<?=$this->gets[0]?>/termek_allapotok" class="btn btn-default"><i class="fa fa-bars"></i> Megrendelt termékek állapotai</a>
 </div>
-<h1>Megrendelések 
+<h1>Megrendelések
     <span>
         <? if($_COOKIE[filtered] == '1'): ?><span class="filtered">Szűrt listázás <a href="/megrendelesek/clearfilters/" title="szűrés eltávolítása" class="actions"><i class="fa fa-times-circle"></i></a></span><? endif; ?>
     </span>
@@ -82,7 +82,7 @@ $nevek = array(
         </tr>
 		</form>
         <? if(count($this->megrendelesek[data]) > 0): foreach($this->megrendelesek[data] as $d):  ?>
-        <? 
+        <?
         $preorders  = 0;
         $itemNum    = 0;
         foreach($d[items][data] as $item){
@@ -97,18 +97,21 @@ $nevek = array(
             </td>
             <td>
                 <input type="hidden" name="accessKey[<?=$d[ID]?>]" value="<?=$d[accessKey]?>" />
-                <div class="nev"><?=$d[nev]?> (<em style="font-weight:normal;"><?=$d[email]?></em>)</div>
+
+                <div class="nev"><?php if ($d['b2b'] == 1): ?>
+                  <span class="b2border">B2B</span>
+                <?php endif; ?><?=$d[nev]?> (<em style="font-weight:normal;"><?=$d[email]?></em>)</div>
                 <div>
                     <a href="<?=HOMEDOMAIN?>order/<?=$d[accessKey]?>" target="_blank">Publikus adatlap</a>
                     <? if( $d[comment] != '' ): ?>
                         &nbsp;&nbsp;<span style="color:#eb6464;"><i class="fa fa-file-text-o"></i> vásárlói megjegyzés</span>
                     <? endif; ?>
-                    <span class="sprinter-trans-export">&nbsp;<label><input type="checkbox" class="sprinter_exp" name="sprinter_exp[]" value="<?=$d[accessKey]?>"> sprinter futár (.csv)</label></span>                    
+                    <span class="sprinter-trans-export">&nbsp;<label><input type="checkbox" class="sprinter_exp" name="sprinter_exp[]" value="<?=$d[accessKey]?>"> sprinter futár (.csv)</label></span>
                 </div>
             </td>
             <td class="center">
-                <strong style="color:<?=$this->allapotok[order][$d[allapot]][szin]?>;"><?=$this->allapotok[order][$d[allapot]][nev]?></strong>                 
-                <? 
+                <strong style="color:<?=$this->allapotok[order][$d[allapot]][szin]?>;"><?=$this->allapotok[order][$d[allapot]][nev]?></strong>
+                <?
                 // PayU pay info
                 if($d[fizetesiModID] == $this->settings['flagkey_pay_payu']): ?>
                 <div>
@@ -116,7 +119,7 @@ $nevek = array(
                     <span class="payu-paidonly">Fizetve. Visszaigazolásra vár.</span>
                     <? elseif($d['payu_fizetve'] == 1 && $d['payu_teljesitve'] == 1): ?>
                     <span class="payu-paid-done">Fizetve. Elfogadva.</span>
-                    <? endif; ?>                    
+                    <? endif; ?>
                 </div>
                 <? endif;?>
             </td>
@@ -150,8 +153,8 @@ $nevek = array(
                                 </tr>
                             </thead>
                             <tbody>
-                                <? 
-                                $c_total = 0; 
+                                <?
+                                $c_total = 0;
                                 foreach($d[items][data] as $item): $c_total += $item[subAr]; ?>
                                 <tr>
                                     <td width="35"><div class="img"><img src="<?=\PortalManager\Formater::productImage($item[profil_kep], 75, \ProductManager\Products::TAG_IMG_NOPRODUCT)?>" alt="" /></div></td>
@@ -187,10 +190,10 @@ $nevek = array(
                                 <? endforeach; ?>
                                 <tr style="background:#f3f3f3;">
                                     <td class="right" colspan="6">Termékek összesített ára:</td>
-                                    <td class="center"><strong><?=Helper::cashFormat($c_total)?> Ft</strong></td>  
+                                    <td class="center"><strong><?=Helper::cashFormat($c_total)?> Ft</strong></td>
                                     <td class="right" colspan="2">
                                         <a href="javascript:void(0);" onclick="addNewItem(<?=$d[ID]?>);">termék hozzáadás <i class="fa fa-plus"></i></a>
-                                    </td>                                  
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -208,7 +211,7 @@ $nevek = array(
                             <input type="hidden" value="<?=$d[allapot]?>" name="prev_allapotID[<?=$d[ID]?>]" />
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-10 selectCol"><strong>Kedvezmény (%):</strong></div>
                             <div class="col-md-2">
@@ -216,7 +219,7 @@ $nevek = array(
                             <input type="hidden" value="<?=$d[kedvezmeny_szazalek]?>" name="prev_kedvezmeny[<?=$d[ID]?>]" />
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-9 selectCol"><strong>Szállítási költség (Ft):</strong></div>
                             <div class="col-md-3">
@@ -224,7 +227,7 @@ $nevek = array(
                             <input type="hidden" value="<?=$d[szallitasi_koltseg]?>" name="prev_szallitasi_koltseg[<?=$d[ID]?>]" />
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-7 selectCol"><strong>Átvételi mód:</strong></div>
                             <div class="col-md-5">
@@ -233,11 +236,11 @@ $nevek = array(
                                 <option value="<?=$m[ID]?>" <?=($m[ID] == $d[szallitasiModID])?'selected':''?>><?=$m[nev]?></option>
                                 <? endforeach; ?>
                             </select>
-                            
+
                             <input type="hidden" value="<?=$d[szallitasiModID]?>" name="prev_szallitas[<?=$d[ID]?>]" />
                             </div>
                         </div>
-                        <? 
+                        <?
                         // PickPackPont
                         if($d[szallitasiModID] == $this->settings['flagkey_pickpacktransfer_id']): ?>
                          <div class="row">
@@ -249,9 +252,9 @@ $nevek = array(
                                 <div class="right"><a href="http://online.sprinter.hu/terkep/#/" target="_blank" style="color:black;">térképes kereső</a></div>
                             </div>
                             </div>
-                        </div>  
+                        </div>
                         <? endif; ?>
-                        <? 
+                        <?
                         // PostaPont
                         if($d[szallitasiModID] == -111): ?>
                          <div class="row">
@@ -262,9 +265,9 @@ $nevek = array(
                                 <div><a href="/xml/postapont/<?=$d[accessKey]?>">címirat letöltés (.xml)</a></div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <? endif; ?>
-                        
+
                         <div class="row">
                             <div class="col-md-7 selectCol"><strong>Fizetési mód:</strong></div>
                             <div class="col-md-5">
@@ -273,11 +276,11 @@ $nevek = array(
                                     <option value="<?=$m[ID]?>" <?=($m[ID] == $d[fizetesiModID])?'selected':''?>><?=$m[nev]?></option>
                                     <? endforeach; ?>
                                 </select>
-                                <input type="hidden" value="<?=$d[fizetesiModID]?>" name="prev_fizetes[<?=$d[ID]?>]" />                                
+                                <input type="hidden" value="<?=$d[fizetesiModID]?>" name="prev_fizetes[<?=$d[ID]?>]" />
                             </div>
                             <? if( $d['fizetesiModID'] == $this->settings['flagkey_pay_payu'] ): ?>
                             <div class="col-md-12">
-                                    <? 
+                                    <?
                                     /**
                                      * PAYU IDN
                                      */
@@ -286,10 +289,10 @@ $nevek = array(
                                         <a target="_blank" href="<?=HOMEDOMAIN?>gateway/payu/idn/<?=$d['accessKey']?>" class="btn btn-sm btn-success">Fizetés elfogadása manuálisan (IDN)</a>
                                     </div>
                                     <? endif; ?>
-                                    <div class="payu-ipn-msgs">                                        
+                                    <div class="payu-ipn-msgs">
                                         <a title="Kattintson az IPN-ek megjelenítéséhez!" href="javascript:void(0);" onclick="$('#payuipns_<?=$d['ID']?>').slideToggle(400);">
-                                            Kártyás fizetés szerver üzenetek (IPN) (<?=count($d['payu_ipn'])?> db)                                            
-                                        </a>                                       
+                                            Kártyás fizetés szerver üzenetek (IPN) (<?=count($d['payu_ipn'])?> db)
+                                        </a>
                                         <div class="ipn-list" id="payuipns_<?=$d['ID']?>" style="display:none;">
                                             <? if( count($d['payu_ipn']) > 0): foreach( $d['payu_ipn'] as $ipn ): ?>
                                             <div>
@@ -300,7 +303,7 @@ $nevek = array(
                                             <? endforeach; else: ?>
                                                 <div class="no-ipn">Nincs szerver IPN üzenet!</div>
                                             <? endif; ?>
-                                        </div>     
+                                        </div>
                                     </div>
                             </div>
                             <? endif; ?>
@@ -377,13 +380,13 @@ $nevek = array(
         $('button[mid]').click(function(){
             var e = $(this);
             var id = e.attr('mid');
-            
+
             $('.oInfo').hide(0);
             $('.o').removeClass('opened');
-            
+
             $('#o_'+id).addClass('opened');
             $('#oid_'+id).show(0);
-        }); 
+        });
     })
 
     function collectSprinterTrans() {
@@ -396,7 +399,7 @@ $nevek = array(
 
         keys = keys.slice(0, -1);
 
-        document.location.href = '/csv/sprinter_transport/'+keys;        
+        document.location.href = '/csv/sprinter_transport/'+keys;
     }
 
     function addNewItem (contid) {
@@ -407,6 +410,6 @@ $nevek = array(
          }, function(d){
             cont.append(d);
          },"html" );
-         
+
     }
 </script>

@@ -897,9 +897,17 @@ class Admin
 			$comment = '';
 			$total_amount = 0;
 
+			if ($b2b == 1) {
+				$comment .= "B2B!!! ";
+			}
+
 			foreach ( $orderData['items'] as $cartItems ) {
 				// Nettó ár
-				$ar_netto = $cartItems['ar'] / 1.27;
+				if ($b2b == 1) {
+					$ar_netto = $cartItems['ar'];
+				} else {
+					$ar_netto = $cartItems['ar'] / 1.27;
+				}
 				// Bruttó ár
 				$ar_brutto = $cartItems['ar'];
 
@@ -957,8 +965,11 @@ class Admin
 	        // Összesített termékek bruttó árai
 	        $total_items_ar_brutto = $total_ar;
 	        // Összesített termékek nettó árai
-	        $total_items_ar_netto = $total_items_ar_brutto / 1.27;
-
+					if ($b2b == 1) {
+						$total_items_ar_netto = $total_items_ar_brutto;
+					} else {
+						$total_items_ar_netto = $total_items_ar_brutto / 1.27;
+					}
 
 	        // Szállítás hozzáadás
 	        if ( $orderData['szallitasi_koltseg'] > 0 ) {
