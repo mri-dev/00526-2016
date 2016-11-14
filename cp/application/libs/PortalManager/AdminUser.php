@@ -271,6 +271,9 @@ class AdminUser
 			if($arg[filters][ID]){
 				$q .= " and o.ID = '".trim($arg[filters][ID])."'"	;
 			}
+			if($arg[filters][onlyb2b]){
+				$q .= " and o.b2b = 1"	;
+			}
 			if($arg[filters][azonosito]){
 				$q .= " and o.azonosito = '".trim($arg[filters][azonosito])."'"	;
 			}

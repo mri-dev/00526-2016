@@ -28,6 +28,11 @@ $nevek = array(
 <?=$this->msg?>
 
 <div class="right">
+  <?php if (isset($_COOKIE[filter_onlyb2b])): ?>
+    <a href="/megrendelesek/?onlyb2b=0" class="b2bfilter b2b-off" style="float: left;">B2B szűkítés eltávolítása <i class="fa fa-times"></i></a>
+  <?php else: ?>
+    <a href="/megrendelesek/?onlyb2b=1" class="b2bfilter b2b-on" style="float: left;">Csak B2B-k mutatása <i class="fa fa-filter"></i></a>
+  <?php endif; ?>
 	<button type="button" onclick="collectSprinterTrans();">Sprinter futár export (.csv)</button>
 </div>
 

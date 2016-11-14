@@ -35,6 +35,13 @@ class B2BAuth extends B2BFactory
       throw new \Exception("Hibás bejelentkezési adatok. Kérjük próbálja meg újra.");
     }
 
+    // Active check
+    $is_active = $user->Active();
+
+    if (!$is_active) {
+      throw new \Exception("Az Ön fiókja jelenleg inaktíválva van. Vegy fel velünk a kapcsolatot.");
+    }
+
     $user->get($valided_user_id);
 
     $login_session_url = $this->createLoginSession($user);

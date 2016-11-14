@@ -2564,3 +2564,15 @@ fieldset.block {
 .b2b-users-table .contact span {
  margin-right: 5px;
 }
+.b2bfilter{
+  line-height: 28px;
+  padding: 0 10px;
+  font-size: 0.85em;
+  color: white !important;
+}
+.b2bfilter.b2b-on {
+  background: #7aab7a;
+}
+.b2bfilter.b2b-off {
+  background: #ca5555;
+}
