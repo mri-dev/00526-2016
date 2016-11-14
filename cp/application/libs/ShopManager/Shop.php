@@ -1861,7 +1861,7 @@ class Shop
 					$pp_pont= ($pp_selected_point) ? $pp_selected_point : 'NULL';
 					$b2b = (isset($b2b)) ? 1 : 0;
 
-					if ( isset($b2b) ) {
+					if ( $b2b == 1 ) {
 						$price_qry = 'getB2BTermekAr(t.marka, t.b2b_netto_ar)';
 					}else{
 						$price_qry = 'getTermekAr(t.marka, IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))';
