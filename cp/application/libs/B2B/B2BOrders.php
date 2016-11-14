@@ -74,6 +74,7 @@ class B2BOrders extends B2BFactory
           oi.termekID,
           oi.me,
           oi.egysegAr,
+          getTermekUrl(oi.termekID,'".DOMAIN."') as url,
           t.nev as termek,
           t.meret,
           t.szin,

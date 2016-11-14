@@ -26,6 +26,7 @@
 <script type="text/javascript" src="<?=JS?>slick/slick.min.js"></script>
 <script type="text/javascript" src="<?=JS?>fancybox/jquery.fancybox.js?v=2.1.4"></script>
 <script type="text/javascript" src="<?=JS?>fancybox/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=hu"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script type="text/javascript">
