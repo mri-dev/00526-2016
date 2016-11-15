@@ -2576,3 +2576,52 @@ fieldset.block {
 .b2bfilter.b2b-off {
   background: #ca5555;
 }
+
+.b2b-dashboard .box {
+  margin: 5px;
+  border: 1px solid #f1f1f1;
+  padding: 25px;
+  -webkit-box-shadow: 2px 2px 5px -2px #d0d0d0;
+  -moz-box-shadow: 2px 2px 5px -2px #d0d0d0;
+  box-shadow: 2px 2px 5px -2px #d0d0d0;
+}
+.b2b-dashboard .box h3 {
+  font-size: 18px;
+  line-height: 1;
+  margin: 0 0 15px 0;
+}
+
+.b2b-dashboard .stat-box .line{
+  background: #ffffff;
+  border: 1px solid #f1f1f1;
+  padding: 15px;
+  -webkit-box-shadow: 2px 2px 5px -2px #d0d0d0;
+  -moz-box-shadow: 2px 2px 5px -2px #d0d0d0;
+  box-shadow: 2px 2px 5px -2px #d0d0d0;
+  margin: 16px 5px;
+}
+.b2b-dashboard .stat-box .line .n{
+  font-size: 54px;
+  font-family: 'Arial';
+  font-weight: bold;
+  color: black;
+  line-height: 1;
+}
+.b2b-dashboard .stat-box .line .n .me{
+  font-size: 22px;
+  text-shadow: none;
+  font-weight: normal;
+}
+.b2b-dashboard .stat-box .line .t{
+  color: #717070;
+  margin-top: 5px;
+  line-height: 1;
+}
+.b2b-dashboard .stat-box .line.yellow .n{
+  color: #ffc30b;
+  text-shadow: 1px 1px 1px #adadad;
+}
+.b2b-dashboard .stat-box .line.red .n{
+  color: #ff6464;
+  text-shadow: 1px 1px 1px #adadad;
+}

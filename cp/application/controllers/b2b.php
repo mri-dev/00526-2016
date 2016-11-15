@@ -1,15 +1,20 @@
 <?
 use B2B\B2BUsers;
 use B2B\B2BUser;
+use B2B\B2BStats;
 use PortalManager\Pagination;
 
-class b2b extends Controller{
+class b2b extends Controller
+{
 		function __construct(){
 			parent::__construct();
 			parent::$pageTitle = 'B2B';
 
 			$this->view->adm = $this->AdminUser;
 			$this->view->adm->logged = $this->AdminUser->isLogged();
+
+			$b2bstat = new B2BStats($this->db);
+			$this->out( 'stats', $b2bstat );
 
 			// SEO Információk
 			$SEO = null;
