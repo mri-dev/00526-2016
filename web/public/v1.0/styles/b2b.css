@@ -247,45 +247,58 @@ body.b2blogged .highlight-view {
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist {
   border: 1px solid #f1f1f1;
   background: #f8f8f8;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
 }
 
 /* line 223, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+.b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .heading {
+  margin: 0 -10px 15px -10px;
+  padding: 15px 0;
+  border-bottom: 1px solid #9c9c9c;
+  background: #f1f1f1;
+}
+
+/* line 230, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items {
   padding: 0 5px;
 }
 
-/* line 225, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 232, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items .item {
-  padding: 5px 0;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #efeeee;
+  margin: 0 -15px;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 10px 0;
 }
 
-/* line 230, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 237, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items .item .name {
   color: black;
   font-size: 1em;
 }
 
-/* line 235, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 242, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items .item em {
   font-size: 0.8em;
   color: #888888;
 }
 
-/* line 239, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 246, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items .item em strong {
   color: #555555;
   font-family: 'Arial';
 }
 
-/* line 247, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 252, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+.b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .items .item:nth-child(even) {
+  background: #f1f1f1;
+}
+
+/* line 257, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row .itemslist .extra-row {
   margin-top: 20px;
 }
 
-/* line 252, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
+/* line 262, /Users/MolnarIstvan/Documents/Munka/Idea Fontana Kft/Git/arena/00526-2016/web/public/v1.0/styles/sass/b2b.scss */
 .b2b-view.dashboard-page .fullwidth-container .b2b-content-holder .b2b-content-wrapper .order-table .info-row.opened {
   display: block;
 }

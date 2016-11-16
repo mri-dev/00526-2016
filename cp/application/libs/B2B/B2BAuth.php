@@ -36,7 +36,7 @@ class B2BAuth extends B2BFactory
     }
 
     // Active check
-    $is_active = $user->Active();
+    $is_active = $user->isActive($email);
 
     if (!$is_active) {
       throw new \Exception("Az Ön fiókja jelenleg inaktíválva van. Vegy fel velünk a kapcsolatot.");

@@ -127,6 +127,30 @@ class B2BUser extends B2BFactory
     return $backrecord;
   }
 
+  public function isActive( $email = false )
+  {
+    if (!$email) { return false; }
+
+    try {
+      $s = $this->db->db->prepare("SELECT engedelyezve FROM ".self::DB_USERS." WHERE email = :email;");
+      $s->execute(array(
+        ':email'  => trim($email)
+      ));
+    } catch (\PDOException $e) {
+      $this->db->printPDOErrorMsg($e, $q, true);
+    }
+
+    if($s->rowCount() === 0) return false;
+
+    $ac = $s->fetchColumn();
+
+    if ($ac == 1) {
+      return true;
+    }
+
+    return false;
+  }
+
   public function get( $id )
   {
     $excp = array();

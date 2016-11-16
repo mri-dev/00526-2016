@@ -218,14 +218,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', end
               .itemslist {
                 border: 1px solid #f1f1f1;
                 background: #f8f8f8;
-                padding: 10px;
+                padding: 0 10px 10px 10px;
+
+                .heading {
+                  margin: 0 -10px 15px -10px;
+                  padding: 15px 0 ;
+                  border-bottom: 1px solid #9c9c9c;
+                  background: #f1f1f1;
+                }
 
                 .items{
                   padding: 0 5px;
                   .item{
-                    padding: 5px 0;
-                    margin-bottom: 10px;
-                    border-bottom: 1px solid #efeeee;
+                    margin: 0 -15px;
+                    border-bottom: 1px solid #d8d8d8;
+                    padding: 10px 0;
 
                     .name{
                       color: black;
@@ -241,6 +248,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', end
                         font-family: 'Arial';
                       }
                     }
+                  }
+                  .item:nth-child(even){
+                    background: #f1f1f1;
                   }
                 }
 

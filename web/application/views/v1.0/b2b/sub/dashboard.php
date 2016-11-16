@@ -39,6 +39,20 @@
       <div class="row info-row order<?=$o['ID']?>">
         <div class="col-md-12">
           <div class="itemslist">
+            <div class="row heading">
+              <div class="col-md-5 left">
+                <strong>Termék</strong>
+              </div>
+              <div class="col-md-3 center">
+                <strong>Cikkszám</strong>
+              </div>
+              <div class="col-md-2 center">
+                <strong>Egységár</strong>
+              </div>
+              <div class="col-md-2 center">
+                <strong>Ár</strong>
+              </div>
+            </div>
             <div class="items">
             <?php foreach ($o['items']['list'] as $ti): ?>
               <div class="row item">
@@ -110,7 +124,8 @@
     var options = {
       pieHole: 0.35,
       slices: colors,
-      pieSliceText: 'value'
+      pieSliceText: 'value',
+      chartArea: {'width': '100%', 'height': '80%'}
     };
 
     chart = new google.visualization.PieChart(document.getElementById('orderstatuses'));
