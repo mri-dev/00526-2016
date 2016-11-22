@@ -1021,15 +1021,16 @@ class Admin
 				"command" 		=> "webshopSale",
 				"parameters" 	=> (object)array(
 					"id" 		=> $orderData['azonosito'],
+					"b2b" 	=> ( ($b2b == 1) ? 1 : 0),
 					"comment" 	=> $comment,
 					//"total_net"	=> (float)$total_netto,
 					"value_net" 	=> $total_items_ar_netto, // Termékek nettó összértéke
 					"value_gross" 	=> $total_items_ar_brutto, // Termékek bruttó összértéke
 					"total_gross" 	=> $total_ar, // Fizetendő bruttó ár, minden levonva és hozzáadva
-			        //"total_vat"	=> 0,
-			        "total_amount" => $total_amount,
-			        "buyer" 	=> $buyer,
-			        "items" 	=> $itemlist
+	        //"total_vat"	=> 0,
+	        "total_amount" => $total_amount,
+	        "buyer" 	=> $buyer,
+	        "items" 	=> $itemlist
 				)
 			);
 
