@@ -1025,7 +1025,12 @@ class Shop
 		else
 		{
 			$price_qry = "getTermekAr(t.marka, IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))";
+			// Black Friday
+			if ( BLACKFRIDAYDISCOUNT ) {
+				$price_qry = "getTermekAr(t.marka, t.brutto_ar)";
+			}
 		}
+
 
 		$q = "SELECT
 			c.ID,
@@ -1871,6 +1876,10 @@ class Shop
 						$price_qry = 'getB2BTermekAr(t.marka, t.b2b_netto_ar)';
 					}else{
 						$price_qry = 'getTermekAr(t.marka, IF(t.akcios,t.akcios_brutto_ar,t.brutto_ar))';
+						// Black Friday
+						if ( BLACKFRIDAYDISCOUNT ) {
+							$price_qry = 'getTermekAr(t.marka, t.brutto_ar)';
+						}
 					}
 
 					$cart = array();
