@@ -127,6 +127,11 @@ class Users
 	{
 		if( !$user_id ) return false;
 
+		// Black Friday
+		if (BLACKFRIDAYDISCOUNT) {
+			return false;
+		}
+
 		$qry = $this->db->query("SELECT arena_water_card FROM felhasznalok WHERE ID = $user_id;");
 
 		if( $qry->rowCount() == 0 ) {

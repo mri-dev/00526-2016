@@ -72,6 +72,12 @@ class Cart
 			$kedvezmenyes = true;
 		}
 
+		// Black Friday
+		if ( BLACKFRIDAYDISCOUNT ) { 
+			$kedvezmenyes = true;
+			$this->user[kedvezmeny] = BLACKFRIDAYDISCOUNT;
+		}
+
 		foreach($data as $d){
 			if( $kedvezmenyes ) {
 				\PortalManager\Formater::discountPrice( $d[ar], $this->user[kedvezmeny], true );

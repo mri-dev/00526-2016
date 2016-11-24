@@ -1059,6 +1059,12 @@ class Shop
 			$kedvezmenyes = true;
 		}
 
+		// Black Friday
+		if ( BLACKFRIDAYDISCOUNT ) {
+			$kedvezmenyes = true;
+			$this->user[kedvezmeny] = BLACKFRIDAYDISCOUNT;
+		}
+
 		foreach($data as $d){
 			if( $kedvezmenyes ) {
 				\PortalManager\Formater::discountPrice( $d[ar], $this->user[kedvezmeny] );
@@ -1928,6 +1934,16 @@ class Shop
 					if($go){
 						$temp_cart = array();
 						foreach($cart as $d){
+
+							// Black Friday
+							if ( BLACKFRIDAYDISCOUNT ) {
+								$kedvezmeny = BLACKFRIDAYDISCOUNT;
+							}
+
+							if( $kedvezmeny > 0 ) {
+								\PortalManager\Formater::discountPrice( $d[ar], $kedvezmeny );
+							}
+
 							$this->db->insert('order_termekek',
 								array(
 									'orderKey' => $orderID,
@@ -1939,10 +1955,6 @@ class Shop
 									'egysegAr' => $d['ar']
 								)
 							);
-
-							if( $kedvezmeny > 0 ) {
-								\PortalManager\Formater::discountPrice( $d[ar], $kedvezmeny );
-							}
 
 							$total += ( $d[ar] * $d[me] );
 

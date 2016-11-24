@@ -703,6 +703,12 @@ class Products
 			$brutto_ar = $d['brutto_ar'];
 			$akcios_brutto_ar = $d['akcios_brutto_ar'];
 
+			// Black Friday
+			if ( BLACKFRIDAYDISCOUNT ) {
+				$d['akcios'] = 1;
+				$akcios_brutto_ar = $brutto_ar - ($brutto_ar / 100 * BLACKFRIDAYDISCOUNT);
+			}
+
 			$kep = $d['profil_kep'];
 			$d['profil_kep'] 		=  \PortalManager\Formater::productImage( $kep, false, self::TAG_IMG_NOPRODUCT );
 			$d['profil_kep_small'] 	=  \PortalManager\Formater::productImage( $kep, 75, self::TAG_IMG_NOPRODUCT );
@@ -1148,6 +1154,12 @@ class Products
 		$brutto_ar 			= $data['brutto_ar'];
 		$akcios_brutto_ar 	= $data['akcios_brutto_ar'];
 
+		// Black Friday
+		if ( BLACKFRIDAYDISCOUNT ) { 
+			$data['akcios'] = 1;
+			$akcios_brutto_ar = $brutto_ar - ($brutto_ar / 100 * BLACKFRIDAYDISCOUNT);
+		}
+
 		$kep = $data['profil_kep'];
 		$data['profil_kep'] 		=  \PortalManager\Formater::productImage( $kep, false, self::TAG_IMG_NOPRODUCT );
 		$data['profil_kep_small'] 	=  \PortalManager\Formater::productImage( $kep, 75, self::TAG_IMG_NOPRODUCT );
@@ -1159,7 +1171,7 @@ class Products
 			$akcios_arInfo 	= $this->getProductPriceCalculate( $data['marka'], $akcios_brutto_ar );
 		}
 
-		if( $d['akcios'] == '1') {
+		if( $data['akcios'] == '1') {
 			$arInfo['ar'] = $arInfo['ar'];
 		}
 
