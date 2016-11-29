@@ -906,7 +906,7 @@ class Admin
 				if ($b2b == 1) {
 					$ar_netto = $cartItems['ar'];
 				} else {
-					$ar_netto = $cartItems['ar'] / 1.27;
+					$ar_netto = $cartItems['ar'] / AFA;
 				}
 				// Bruttó ár
 				$ar_brutto = $cartItems['ar'];
@@ -968,7 +968,12 @@ class Admin
 					if ($b2b == 1) {
 						$total_items_ar_netto = $total_items_ar_brutto;
 					} else {
-						$total_items_ar_netto = $total_items_ar_brutto / 1.27;
+						$total_items_ar_netto = $total_items_ar_brutto / AFA;
+					}
+
+					if ($b2b == 1) {
+						$total_ar = $total_ar * AFA;
+						$total_items_ar_brutto = $total_ar;
 					}
 
 	        // Szállítás hozzáadás
@@ -1034,6 +1039,8 @@ class Admin
 				)
 			);
 
+			print_r($request_object); exit;
+
 
 			$this->logOrderChange( $orderID, __LINE__, 'CLORADE - REQUEST - START', $post[allapotID][$orderID] );
 
@@ -1056,7 +1063,7 @@ class Admin
 			}
 
 			$this->logOrderChange( $orderID, __LINE__, 'CLORADE - REQUEST - END - LOG REPORT', $post[allapotID][$orderID] );
-			$this->logWebshopsaleReport( $orderData['azonosito'], $saleRequestResult );
+			$this->logWebshopsaleReport( $orderData['azonosito'], $saleRequestResult, $request_object );
 			$this->logOrderChange( $orderID, __LINE__, 'CLORADE - REQUEST - END - LOG REPORT - END', $post[allapotID][$orderID] );
 			/* */
 		}
@@ -1206,16 +1213,18 @@ class Admin
 		return $changedData;
 	}
 
-	private function logWebshopsaleReport( $orderid, $json )
+	private function logWebshopsaleReport( $orderid, $json, $starter = false )
 	{
-		$result = json_decode( $json, true );
+		$result	 = json_decode( $json, true );
+		$starter = json_encode( $starter, true );
 
 		$ins 					= array();
 		$ins['megrendeles'] 	= $orderid;
 		$ins['allapot']		 	= $result['parameters']['success'];
 		$ins['vasarlas_idopont']= $result['parameters']['time'];
-		$ins['hibauzenet'] 		= $result['parameters']['errorMsg'];
-		$ins['json'] 			= $json;
+		$ins['hibauzenet'] 			= $result['parameters']['errorMsg'];
+		$ins['json'] 						= $json;
+		$ins['start_json'] 			= $starter;
 
 		$this->db->insert(
 			'webshopSale_report',
