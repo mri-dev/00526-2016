@@ -1039,8 +1039,7 @@ class Admin
 				)
 			);
 
-			print_r($request_object); exit;
-
+			//print_r($request_object); exit;
 
 			$this->logOrderChange( $orderID, __LINE__, 'CLORADE - REQUEST - START', $post[allapotID][$orderID] );
 
