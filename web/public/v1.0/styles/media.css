@@ -3332,7 +3332,16 @@ input + .text-hint {
   margin-top: 3px;
 }
 
-
+.b2b-br-price {
+  font-size: 13px;
+  margin: 0 5px;
+  color: #9c9c9c;
+  font-weight: 400;
+}
+.b2b-br-price .cash {
+  color: #222222;
+  font-weight: bold;
+}
 
 @media screen and (max-width: 1720px) {
 	.page-width {

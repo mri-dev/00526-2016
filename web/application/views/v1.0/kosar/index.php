@@ -30,8 +30,8 @@
 								<tr class="item-header">
 									<th class="center">Termék</th>
 									<th class="center">Me.</th>
-									<th class="center" width="15%"><?=($this->user[kedvezmeny] > 0) ? 'Kedvezményes egységár':'Egységár'?></th>
-									<th class="center" width="15%"><?=($this->user[kedvezmeny] > 0) ? 'Kedvezményes ár':'Ár'?></th>
+									<th class="center" width="15%"><?=(defined("B2BLOGGED"))?'Nettó ':''?><?=($this->user[kedvezmeny] > 0) ? 'Kedvezményes egységár':'Egységár'?></th>
+									<th class="center" width="15%"><?=(defined("B2BLOGGED"))?'Nettó ':''?><?=($this->user[kedvezmeny] > 0) ? 'Kedvezményes ár':'Ár'?></th>
 									<th class="center"></th>
 								</tr>
 							</thead>
@@ -467,7 +467,14 @@
 	                	<div class="row np">
 	                    	<div class="col-sm-12">
 	                        	<ul class="atvetel">
-	                            	<? foreach($this->szallitas as $d): ?>
+	                            	<?
+																foreach($this->szallitas as $d):
+																if (defined("B2BLOGGED")) {
+																	if ($d['on_b2b'] == 0) {
+																		continue;
+																	}
+																}
+																?>
 	                        		<li><input <?=($this->storedString[2][atvetel] == $d[ID])?'checked':''?> id="atvet_<?=$d[ID]?>" type="radio" name="atvetel" value="<?=$d[ID]?>" <?=($d[ID] == 2 && $no_ppp_itemNum != 0)?'disabled':''?>/><label for="atvet_<?=$d[ID]?>"><?=$d[nev]?> <em><?=Product::transTime($d[ID])?></em><? if($d[ID] == 2 && $no_ppp_itemNum != 0): ?><br /><span class="subtitle"><?=$no_ppp_itemNum?> db termék nem szállítható Pick Pack Pontra</span><? endif; ?></label>
 	                                <?
 	                                // PICK PACK PONT ÁTVÉTEL FORM
@@ -723,10 +730,15 @@
 	                                    	if($szallitasiKoltseg > 0){	$vegosszeg += $szallitasiKoltseg; }
 											//if($kedvezmeny > 0){	$vegosszeg -= $kedvezmeny; }
 										?>
-	                                	<span class="n">Végösszeg:</span>
-	                                    <span class="a"><?=$this->price_netbr?> <span class="ar"><?=Helper::cashFormat($vegosszeg)?></span> Ft</span>
-	                                    <input type="hidden" name="kedvezmeny" value="<?=$this->user[kedvezmeny]?>" />
-	                                    <input type="hidden" name="szallitasi_koltseg" value="<?=$szallitasiKoltseg?>" />
+                                		<span class="n">Végösszeg:</span>
+                                    <span class="a">
+																			<?=$this->price_netbr?> <span class="ar"><?=Helper::cashFormat($vegosszeg)?></span> Ft
+																			<?php if (defined("B2BLOGGED") && $this->price_netbr == 'nettó'): ?>
+																			<div class="b2b-br-price">bruttó <span class="cash"><?=Helper::cashFormat($vegosszeg*AFA)?></span> Ft</div>
+																			<?php endif; ?>
+																		</span>
+                                    <input type="hidden" name="kedvezmeny" value="<?=$this->user[kedvezmeny]?>" />
+                                    <input type="hidden" name="szallitasi_koltseg" value="<?=$szallitasiKoltseg?>" />
 	                               	</div>
 	                            </div>
 	                        </div>
@@ -742,14 +754,18 @@
 															<input type="hidden" name="b2b" value="1">
 															<div class="divider"></div>
 															<div class="b2b-trans-info">
-																* FIGYELEM! A szállítási költség a megrendelés után változhat. A költség függ a megrendelt tételek jellegétől (mennyiségtől, súlytól), hogy milyen módon és formában tudjuk biztonságosan kiszállítani!
+																* FIGYELEM! A szállítási költség és a pontos végösszeg a megrendelés után változhat. A szállítási költség függ a megrendelt tételek jellegétől (mennyiségtől, súlytól), hogy milyen módon és formában tudjuk biztonságosan kiszállítani! A szállítás pontos összegéről az összekészítés után történő visszaigazoláskor értesítjük.
 															</div>
 														<?php endif; ?>
 	                        	<div class="divider"></div>
 	                        	<? if(false): ?>
                        			<div class="left"><input type="checkbox" checked="checked" id="subscribe" name="subscribe" /><label for="subscribe">Felirakozok hírlevélre!</label></div>
                        			<? endif; ?>
-                             	<div class="left"><input type="checkbox" id="aszf_ok" name="aszf_ok"><label for="aszf_ok">Megrendelésemmel elfogadom a(z) <?=$this->settings['page_title']?> mindenkor hatályos <a href="/p/aszf" target="_blank">Általános Szerződési Feltételek</a>et!</label></div>
+															<?php if (defined("B2BLOGGED")): ?>
+																<div class="left"><input type="checkbox" id="aszf_ok" name="aszf_ok"><label for="aszf_ok">Megrendelésemmel elfogadom a(z) <?=$this->settings['page_title']?> mindenkor hatályos <a href="/p/b2b-aszf" target="_blank">B2B Általános Szerződési Feltételek</a>et!</label></div>
+															<?php else: ?>
+																<div class="left"><input type="checkbox" id="aszf_ok" name="aszf_ok"><label for="aszf_ok">Megrendelésemmel elfogadom a(z) <?=$this->settings['page_title']?> mindenkor hatályos <a href="/p/aszf" target="_blank">Általános Szerződési Feltételek</a>et!</label></div>
+															<?php endif; ?>
 	                        </div>
 	                    </div>
 	                </div>

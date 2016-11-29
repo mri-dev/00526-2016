@@ -1,6 +1,6 @@
 <? require "head.php"; ?>
 <h1>Tisztelt <?=$user->Name()?>!</h1>
-<strong>Ön sikersen elindította a bejelentkezési folyamatot weboldalunkon.</strong>
+<strong>Ön sikeresen elindította a bejelentkezési folyamatot weboldalunkon.</strong>
 <br><br>
 <div style="text-align:center;">
   <div style="height: 1px; background-color: #888888; width: 50%; margin: 15px auto;"></div>
@@ -12,7 +12,7 @@
   <div style="height: 1px; background-color: #888888; width: 50%; margin: 15px auto;"></div>
 </div>
 <br>
-Amennyiben nem Ön vagy megbízottja indította el a bejelentkezési folyamatot, jelezze ügyfélszolgálatunknak.
+Amennyiben nem Ön vagy megbízottja indította el a bejelentkezési folyamatot, kérjük jelezze ügyfélszolgálatunknak az <a href="mailto:info@arena.hu">info@arena.hu</a> címen.
 <br><br>
 --<br>
 Azonosító érvényességi ideje: <strong><?=date('Y / m / d H:i', $ervenyes)?></strong><br>

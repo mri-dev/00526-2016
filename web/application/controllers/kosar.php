@@ -58,7 +58,12 @@ class kosar extends Controller{
 				$this->view->canOrder = false;
 			}
 
-			$min_price_order = $this->view->settings[order_min_price];
+			if (defined('B2BLOGGED')) {
+				$min_price_order = $this->view->settings[b2b_order_min_price];
+			} else {
+				$min_price_order = $this->view->settings[order_min_price];
+			}
+
 			if( $this->view->kosar[totalPrice] < $min_price_order ) {
 				$this->view->canOrder = false;
 				$this->view->not_reached_min_price_text = 'Minimális vásárlási érték <strong>'.Helper::cashFormat($min_price_order).' Ft</strong>! A kosarában található termékek összesített értéke nem haladja meg ezt az értéket!';
