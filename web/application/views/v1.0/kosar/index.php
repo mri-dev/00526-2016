@@ -725,6 +725,7 @@
 	                                    <span class="a"><span class="ar"><?=($this->user[kedvezmeny]> 0)? '<span class="kedv">'.$this->user[kedvezmeny].'%</span>':'</span>&mdash;'?></span>
 	                                </div>
 	                            	<div class="p">
+																		<?php if (defined("B2BLOGGED")): $szallitasiKoltseg = 0; endif; ?>
 	                                	<span class="n">Szállítási költség:</span>
 	                                    <span class="a"><span class="ar"><?=($szallitasiKoltseg > 0)?'+'.Helper::cashFormat($szallitasiKoltseg):'0'?></span> Ft<?=(defined("B2BLOGGED"))?'*':''?></span>
 	                                </div>
