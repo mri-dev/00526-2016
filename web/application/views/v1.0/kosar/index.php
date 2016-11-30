@@ -68,8 +68,8 @@
 										</div>
 									</td>
 									<td class="center"><span><?=$d[me]?> db</span><? if($d['me'] > $d['raktar_keszlet']): ?><div class="over-me-stock"><i class="fa fa-exclamation-triangle"></i> max. <?=$d['raktar_keszlet']?> db</div><? endif; ?></td>
-									<td class="center"><span><?=Helper::cashFormat($d[ar])?> Ft</span></td>
-									<td class="center"><span class="cash"><strong><?=Helper::cashFormat($d[sum_ar])?> Ft</strong></span></td>
+									<td class="center"><span><?=Helper::cashFormat($d[ar])?> Ft <?=(defined("B2BLOGGED"))?'<span class="pafa">+ ÁFA</span>':''?></span></td>
+									<td class="center"><span class="cash"><strong><?=Helper::cashFormat($d[sum_ar])?> Ft</strong> <?=(defined("B2BLOGGED"))?'<span class="pafa">+ ÁFA</span>':''?></span></td>
 									<td class="center action">
 										<? if($this->gets[1] == '' || $this->gets[1] == '0'): ?>
 										<span>
@@ -264,6 +264,9 @@
 	                                    	<div class="kedvPrice">kedvezményesen <strong><?=Helper::cashFormat($calc_final_total)?> Ft</strong></div>
 	                                    <? else: ?>
 	                                    	<?=$this->price_netbr?> <strong><?=Helper::cashFormat($calc_final_total)?></strong> Ft
+																				<?php if (defined("B2BLOGGED")): ?>
+																					<div>bruttó <strong><?=Helper::cashFormat($calc_final_total*AFA)?></strong> Ft</div>
+																				<?php endif; ?>
 	                                    <? endif;?>
 	                                </div>
 	                            </div>

@@ -142,8 +142,6 @@ a:link, a:visited{
 a.btn:link, a.btn:visited{
 	color:white;
 }
-
-
 body, html
 {
 	position:relative;
@@ -3330,6 +3328,10 @@ input + .text-hint {
   color: #c1c1c1;
   font-weight: 300;
   margin-top: 3px;
+}
+
+.pafa {
+  font-size: 12px;
 }
 
 .b2b-br-price {

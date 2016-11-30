@@ -1,4 +1,4 @@
-<? require "head.php"; 
+<? require "head.php";
 $szamlazasi_keys 	= json_decode($szamlazasi_keys, true);
 $szallitasi_keys 	= json_decode($szallitasi_keys, true);
 $total 				= 0;
@@ -8,7 +8,7 @@ $total 				= 0;
 <div><strong><u><?=$orderData[azonosito]?></u></strong> azonosítójú rendelése <strong><u><?=date('Y-m-d H:i:s')?></u></strong> időponttal megváltozott.</div>
 <div><h3>Változások:</h3></div>
 <? foreach($changedData as $chkey => $chv){
-	
+
 	$keyname = $strKey[$chkey];
 
 	if($chkey == 'termekAllapot') {
@@ -17,14 +17,18 @@ $total 				= 0;
 	if($chkey == 'uj_termek') {
 		$after = ' ('.$chv.' db hozzáadott termék)';
 	}
-	echo '<div>- ' . $keyname . $after . '</div>';	
-} 
+	echo '<div>- ' . $keyname . $after . '</div>';
+}
 ?>
 <div></div>
 <div><h3>Megrendelés állapota:</h3></div>
 <div><strong style="color:<?=$orderAllapotok[$allapot][szin]?>;"><?=$orderAllapotok[$allapot][nev]?></strong></div>
-
-<div><h3>Termékek</h3></div> 
+<?php if ($orderData['b2b'] == 1): ?>
+	<div style="color: red; margin: 10px 0; font-size: 13px;">
+		Figyelem! Kérjük, hogy kártyás és banki átutalás fizetés esetén a vételár összegét azután teljesítse pénzforgalmi számlaszámunkra, miután a szállítási költség ismert. A fizetést a "Fizetésre vár" állapotváltozásra állítás után tudja rendezni. Ekkor már a tényleges fizetendő végösszeg szerepel a megrendelésénél.
+	</div>
+<?php endif; ?>
+<div><h3>Termékek</h3></div>
 <table width="100%" border="1" style="border-collapse:collapse; border:2px solid #dddddd; background:#ffffff;" cellpadding="10" cellspacing="0">
 <thead>
 	<tr>
@@ -32,8 +36,8 @@ $total 				= 0;
 		<th align="center">Termék</th>
 		<th align="center">Szín</th>
 		<th align="center">Méret</th>
-		<th align="center">Bruttó e. ár</th>
-		<th align="center">Bruttó ár</th>
+		<th align="center"><?=($orderData['b2b'] == 1)?'Nettó':'Bruttó'?> e. ár</th>
+		<th align="center"><?=($orderData['b2b'] == 1)?'Nettó':'Bruttó'?> ár</th>
 		<th align="center">Állapot</th>
 	</tr>
 </thead>
@@ -46,14 +50,14 @@ $total 				= 0;
 		<td><a href="<?=$d[url]?>"><?=$d[nev]?></a></td>
 		<td align="center"><?=$d[szin]?></td>
 		<td align="center"><?=$d[meret]?></td>
-		<td align="center"><?=round($d[ar])?> Ft</td>
-		<td align="center"><?=round($d[ar]*$d[me])?> Ft</td>
+		<td align="center"><?=round($d[ar])?> Ft <?=($orderData['b2b'] == 1)?' + ÁFA':''?></td>
+		<td align="center"><?=round($d[ar]*$d[me])?> Ft <?=($orderData['b2b'] == 1)?' + ÁFA':''?></td>
 		<td align="center"><strong style="color:<?=$termekAllapotok[$d[allapotID]][szin]?>;"><?=$termekAllapotok[$d[allapotID]][nev]?></strong></td>
 	</tr>
 <? } ?>
 	<tr>
 		<td colspan="6" align="right">Összesen:</td>
-		<td align="center"><?=$total?> Ft</td>
+		<td align="center"><?=$total?> Ft <?=($orderData['b2b'] == 1)?' + ÁFA':''?></td>
 	</tr>
 	<tr>
 		<td colspan="6" align="right">Szállítási költség:</td>
@@ -63,7 +67,10 @@ $total 				= 0;
 		<td colspan="6" align="right">Kedvezmény:</td>
 		<td align="center"><?=(($kedvezmeny > 0) ? $kedvezmeny : 0 )?>%</td>
 	</tr>
-	<? 
+	<?
+		if ($orderData['b2b'] == 1) {
+			$total = round($total * AFA);
+		}
 		if($szallitasi_koltseg > 0) $total += $szallitasi_koltseg;
 	?>
 	<tr>
@@ -72,7 +79,7 @@ $total 				= 0;
 	</tr>
 </tbody>
 </table>
-<div><h3>Számlázási adatok</h3></div> 
+<div><h3>Számlázási adatok</h3></div>
 <table width="100%" border="1" style="border-collapse:collapse; border:2px solid #dddddd; background:#ffffff;" cellpadding="10" cellspacing="0">
 <tbody>
 	<tr>
@@ -97,7 +104,7 @@ $total 				= 0;
 	</tr>
 </tbody>
 </table>
-<div><h3>Szállítási adatok</h3></div> 
+<div><h3>Szállítási adatok</h3></div>
 <table width="100%" border="1" style="border-collapse:collapse; border:2px solid #dddddd; background:#ffffff;" cellpadding="10" cellspacing="0">
 <tbody>
 	<tr>
@@ -168,7 +175,7 @@ $total 				= 0;
 		<tr>
 			<td align="left">Bank:</td>
 			<td align="left"><strong><?=$settings['banktransfer_bank']?></strong></td>
-		</tr>		
+		</tr>
 		<tr>
 			<td align="left">Közleménybe:<br><em style="font-size:12px;">(megrendelés azonosító)</em></td>
 			<td align="left"><strong><?=$orderData[azonosito]?></strong></td>
@@ -177,7 +184,7 @@ $total 				= 0;
 	</table>
 <? } ?>
 
-<br>				
+<br>
 <div>Megrendelését nyomon követheti weboldalunkon. Regisztrált tagként, bejelentkezés után a megrendelések menüpont alatt keresse. <br /><br />
 <strong>Ha Ön nem regisztrált felhasználó a(z) <?=$settings['page_title']?> oldalon, ezen a linken megtekintheti aktuális megrendelését:</strong><br />
 <a href="<?=$settings['domain']?>/order/<?=$accessKey?>"><?=$settings['domain']?>/order/<?=$accessKey?></a>

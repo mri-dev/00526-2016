@@ -33,7 +33,7 @@
           <div class="id"><a title="Kattintson a megrendelés részleteiért." href="javascript:void(0);" onclick="showOrder(<?=$o['ID']?>);" ><?=$o['azonosito']?> <i class="fa fa-table"></i></a></div>
         </div>
         <div class="col-md-3 ord-status center"><strong style="color: <?=$this->orders->status_text_colors[$o['allapot']]?>;"><?=$this->orders->status_texts[$o['allapot']]?></strong></div>
-        <div class="col-md-3 ord-sumprice center"><?=\Helper::cashFormat($o['vegosszeg'])?> Ft</div>
+        <div class="col-md-3 ord-sumprice center"><?=\Helper::cashFormat($o['items']['sum']*AFA+$o['szallitasi_koltseg'])?> Ft</div>
         <div class="col-md-3 ord-date center"><?=$o['idopont']?></div>
       </div>
       <div class="row info-row order<?=$o['ID']?>">
@@ -63,16 +63,24 @@
                   <em><?=($ti['szin'])?'Szín: <strong>'.$ti['szin'].'</strong>':''?><?=($ti['meret'])?'&nbsp;&nbsp; Méret: <strong>'.$ti['meret'].'</strong>':''?></em>
                 </div>
                 <div class="col-md-3 center"><em><?=$ti['code']?></em></div>
-                <div class="col-md-2 center"><?=\Helper::cashFormat($ti['egysegAr'])?> Ft</div>
-                <div class="col-md-2 center"><strong><?=\Helper::cashFormat($ti['egysegAr']*$ti['me'])?> Ft</strong></div>
+                <div class="col-md-2 center"><?=\Helper::cashFormat($ti['egysegAr'])?> Ft <span class="pafa">+ ÁFA</span></div>
+                <div class="col-md-2 center"><strong><?=\Helper::cashFormat($ti['egysegAr']*$ti['me'])?> Ft</strong> <span class="pafa">+ ÁFA</span></div>
               </div>
             <?php endforeach; ?>
-              <div class="row extra-row row-szallitas">
+              <div class="row extra-row">
                 <div class="col-md-10 right">
                   Termékek összesen:
                 </div>
                 <div class="col-md-2 center">
-                  <strong><?=\Helper::cashFormat($o['items']['sum'])?> Ft</strong>
+                  <strong><?=\Helper::cashFormat($o['items']['sum'])?> Ft</strong> <span class="pafa">+ ÁFA</span>
+                </div>
+              </div>
+              <div class="row extra-row">
+                <div class="col-md-10 right">
+                  Termékek vételára:
+                </div>
+                <div class="col-md-2 center">
+                  <strong><?=\Helper::cashFormat($o['items']['sum']*AFA)?> Ft</strong>
                 </div>
               </div>
               <div class="row extra-row row-szallitas">
@@ -81,6 +89,14 @@
                 </div>
                 <div class="col-md-2 center">
                   <strong><?=\Helper::cashFormat($o['szallitasi_koltseg'])?> Ft</strong>
+                </div>
+              </div>
+              <div class="row extra-row">
+                <div class="col-md-10 right">
+                  Végösszeg:
+                </div>
+                <div class="col-md-2 center">
+                  <strong><?=\Helper::cashFormat($o['items']['sum']*AFA+$o['szallitasi_koltseg'])?> Ft</strong></span>
                 </div>
               </div>
               <div class="row extra-row row-szallitas">

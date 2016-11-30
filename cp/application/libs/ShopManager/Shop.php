@@ -2014,7 +2014,8 @@ class Shop
 							'ppp_uzlet_str' => $pppkod,
 							'is_pickpackpont' => $is_pickpackpont,
 							'orderID' 		=> $orderID,
-							'megjegyzes' 	=> $comment
+							'megjegyzes' 	=> $comment,
+							'b2b' 				=> $b2b
 						);
 						$mail->setSubject( ( ($b2b == 1) ? 'B2B ' : '' ).'Értesítő: Új'.( ($b2b == 1) ? ' B2B' : '' ).' megrendelés érkezett' );
 						$mail->setMsg( (new Template( VIEW . 'templates/mail/' ))->get( 'order_new_admin', $arg ) );
@@ -2050,7 +2051,8 @@ class Shop
 							'orderID' 		=> $orderID,
 							'megjegyzes' 	=> $comment,
 							'is_eloreutalas' => $is_eloreutalas,
-							'accessKey' => $accessKey
+							'accessKey' => $accessKey,
+							'b2b' 			=> $b2b
 						);
 
 						$mail->setSubject( 'Megrendelését fogadtuk: '.$orderData[azonosito] );

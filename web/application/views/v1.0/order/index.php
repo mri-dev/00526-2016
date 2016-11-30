@@ -27,6 +27,10 @@
                     $termek_ar_total += $d[subAr];
                 endforeach;
 
+                if ($o['b2b'] == 1) {
+                  $vegosszeg = round($vegosszeg * AFA);
+                }
+
                 if($o[szallitasi_koltseg] > 0) $vegosszeg += $o[szallitasi_koltseg];
               //  if($o[kedvezmeny] > 0) $vegosszeg -= $o[kedvezmeny];
 
@@ -109,10 +113,16 @@
                                     </td>
                                     <td class="center"><span style="color:<?=$d[allapotSzin]?>;"><strong><?=$d[allapotNev]?></strong></span></td>
                                     <td class="center"><span><?=$d[me]?></span></td>
-                                    <td class="center"><span><?=Helper::cashFormat($d[egysegAr])?> Ft</span></td>
-                                    <td class="center"><span><?=Helper::cashFormat($d[subAr])?> Ft</span></td>
+                                    <td class="center"><span><?=Helper::cashFormat($d[egysegAr])?> Ft <?=($o['b2b'] == 1)?'<span class="pafa">+ ÁFA</span>':''?></span></td>
+                                    <td class="center"><span><?=Helper::cashFormat($d[subAr])?> Ft <?=($o['b2b'] == 1)?'<span class="pafa">+ ÁFA</span>':''?></span></td>
                                 </tr>
                                 <? endforeach; ?>
+                                <?php if ($o['b2b'] == 1): ?>
+                                <tr style="font-size:15px;">
+                                    <td class="right" colspan="4"><strong>Nettó termékár</strong></td>
+                                    <td class="center"><span><strong><?=Helper::cashFormat($termek_ar_total)?> Ft</strong></span></td>
+                                </tr>
+                                <?php endif; ?>
                                 <tr>
                                     <td class="right" colspan="4"><div><strong>Szállítási költség</strong></div></td>
                                     <td class="center"><span><?=Helper::cashFormat($o[szallitasi_koltseg])?> Ft</span></td>

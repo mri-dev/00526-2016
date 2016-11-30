@@ -1193,6 +1193,7 @@ class Admin
 				'allapot' => $allapot,
 				'strKey' => $strKey,
 				'ppp_uzlet_str' => $pickpackpont_uzlet_kod,
+				'b2b' => $b2b
 			);
 
 			$mail->setSubject( 'Megrendelése megváltozott: '.$orderData[azonosito] );

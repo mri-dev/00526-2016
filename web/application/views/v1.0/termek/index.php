@@ -39,7 +39,7 @@
             <div class="price">
               <? if( $this->product['akcios'] == '1' && $this->product['akcios_fogy_ar'] > 0): ?>
                 <span class="old" title="Eredeti ár"><strike><?=\PortalManager\Formater::cashFormat($this->product['ar'])?> Ft</strike></span> <span title="Akciós ár" class="new"><?=\PortalManager\Formater::cashFormat($this->product['akcios_fogy_ar'])?> Ft</span> <? else: ?>
-                <?=\PortalManager\Formater::cashFormat($this->product['ar'])?> Ft
+                <?=\PortalManager\Formater::cashFormat($this->product['ar'])?> Ft <?=(defined("B2BLOGGED"))?'<span class="pafa">+ ÁFA</span>':''?>
                 <?php if (defined("B2BLOGGED")): ?>
                   <span title="Termék bruttó ára" class="b2b-br-price">bruttó <?=\PortalManager\Formater::cashFormat($this->product['ar']*AFA)?> Ft</span>
                 <?php endif; ?>
