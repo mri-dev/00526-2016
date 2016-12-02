@@ -475,7 +475,7 @@ class Products
 		}
 		else
 		{
-			$add = " and p.b2b IN(".self::B2BFLAGID_IN_TRUE.") ";
+			$add = " and p.b2b IN(".self::B2BFLAGID_IN_FALSE.") ";
 			$whr .= $add;
 			$size_whr .= $add;
 		}
@@ -1155,7 +1155,7 @@ class Products
 		$akcios_brutto_ar 	= $data['akcios_brutto_ar'];
 
 		// Black Friday
-		if ( BLACKFRIDAYDISCOUNT ) { 
+		if ( BLACKFRIDAYDISCOUNT ) {
 			$data['akcios'] = 1;
 			$akcios_brutto_ar = $brutto_ar - ($brutto_ar / 100 * BLACKFRIDAYDISCOUNT);
 		}
