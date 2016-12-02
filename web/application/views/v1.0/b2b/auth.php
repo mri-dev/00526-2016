@@ -12,8 +12,8 @@
             <h3>B2B Partnerprogram</h3>
           </div>
           <div class="desc">
-            <p><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu diam vitae velit lobortis eleifend. Duis quis nisl eget odio feugiat pharetra. Phasellus mi justo, tristique a tincidunt eget, semper ut felis. Aliquam tempor rhoncus tortor finibus facilisis. Sed mattis sit amet lectus in tincidunt. Curabitur imperdiet ante lectus, sit amet ultricies tellus posuere vel.</p>
+            <p><strong>Az Arena Magyarország Kft. online nagykereskedelmi rendelési rendszere.</strong></p>
+            <p>Amennyiben a B2B partnerprogram regisztrált felhasználója szeretne lenni, kérjük, vegye fel a kapcsolatot ügyfélszolgálatunkkal.</p>
             <a href="/p/kapcsolatfelvetel" class="btn btn-info">Kapcsolat</a>
           </div>
         </div>
