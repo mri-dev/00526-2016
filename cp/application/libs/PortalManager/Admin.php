@@ -1029,9 +1029,9 @@ class Admin
 					"b2b" 	=> ( ($b2b == 1) ? 1 : 0),
 					"comment" 	=> $comment,
 					//"total_net"	=> (float)$total_netto,
-					"value_net" 	=> $total_items_ar_netto, // Termékek nettó összértéke
-					"value_gross" 	=> $total_items_ar_brutto, // Termékek bruttó összértéke
-					"total_gross" 	=> $total_ar, // Fizetendő bruttó ár, minden levonva és hozzáadva
+					"value_net" 	=> round($total_items_ar_netto), // Termékek nettó összértéke
+					"value_gross" 	=> round($total_items_ar_brutto), // Termékek bruttó összértéke
+					"total_gross" 	=> round($total_ar), // Fizetendő bruttó ár, minden levonva és hozzáadva
 	        //"total_vat"	=> 0,
 	        "total_amount" => $total_amount,
 	        "buyer" 	=> $buyer,
@@ -1216,7 +1216,7 @@ class Admin
 	private function logWebshopsaleReport( $orderid, $json, $starter = false )
 	{
 		$result	 = json_decode( $json, true );
-		$starter = json_encode( $starter, true );
+		$starter = json_encode( $starter, \JSON_UNESCAPED_UNICODE );
 
 		$ins 					= array();
 		$ins['megrendeles'] 	= $orderid;
