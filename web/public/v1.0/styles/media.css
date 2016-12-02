@@ -189,7 +189,6 @@ body, html
 =            HEADER            =
 ==============================*/
 .top {
-  border-top: 5px solid red;
 	background-color: #0ac8ff;
 	color: white;
 	padding: 0 14px;
