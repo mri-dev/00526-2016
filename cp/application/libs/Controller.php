@@ -12,6 +12,7 @@ use PortalManager\Portal;
 use Applications\Captcha;
 
 class Controller {
+    const VERSION = '2.0';
     public $db = null;
     public $hidePatern 	= true;
     private $theme_wire 	= '';
