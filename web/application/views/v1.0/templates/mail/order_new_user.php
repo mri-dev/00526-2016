@@ -69,9 +69,14 @@
 	<tr>
 		<td colspan="6" align="right"><strong>Végösszeg:</strong></td>
 		<td align="center">
-			<strong><?=round($total)?> Ft</strong> <?=($b2b == 1)?' + ÁFA':''?>
-			<?php if ($b2b == 1): $etotal = $etotal*AFA; ?>
-				<div>bruttó <? echo \Helper::cashFormat($etotal+$szallitasi_koltseg); ?> Ft</div>
+			<?php if ($b2b == 1): ?>
+				<?=round($total)?> Ft + ÁFA
+				<div>
+					<?php $etotal = $etotal*AFA; ?>
+					<strong>bruttó <? echo \Helper::cashFormat($etotal+$szallitasi_koltseg); ?> Ft</strong>
+				</div>
+			<?php else: ?>
+				<strong><?=round($total)?> Ft</strong>
 			<?php endif; ?>
 		</td>
 	</tr>

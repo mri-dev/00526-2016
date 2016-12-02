@@ -724,10 +724,10 @@
 	                                	<span class="n">Kedvezmény:</span>
 	                                    <span class="a"><span class="ar"><?=($this->user[kedvezmeny]> 0)? '<span class="kedv">'.$this->user[kedvezmeny].'%</span>':'</span>&mdash;'?></span>
 	                                </div>
-	                            	<div class="p">
+	                            	<div class="p" style="<?=(defined("B2BLOGGED"))?'color:#ff8a8a !important;':''?>">
 																		<?php if (defined("B2BLOGGED")): $szallitasiKoltseg = 0; endif; ?>
 	                                	<span class="n">Szállítási költség:</span>
-	                                    <span class="a"><span class="ar"><?=($szallitasiKoltseg > 0)?'+'.Helper::cashFormat($szallitasiKoltseg):'0'?></span> Ft<?=(defined("B2BLOGGED"))?'*':''?></span>
+	                                  <span class="a"><span class="ar" style="<?=(defined("B2BLOGGED"))?'color:#ff8a8a !important;':''?>"><?=($szallitasiKoltseg > 0)?'+'.Helper::cashFormat($szallitasiKoltseg):'0'?></span> Ft<?=(defined("B2BLOGGED"))?'*':''?></span>
 	                                </div>
 	                                <div class="p end">
 	                                	<?
@@ -736,9 +736,11 @@
 										?>
                                 		<span class="n">Végösszeg:</span>
                                     <span class="a">
-																			<?=$this->price_netbr?> <span class="ar"><?=Helper::cashFormat($vegosszeg)?></span> Ft
-																			<?php if (defined("B2BLOGGED") && $this->price_netbr == 'nettó'): ?>
-																			<div class="b2b-br-price">bruttó <span class="cash"><?=Helper::cashFormat($vegosszeg*AFA)?></span> Ft</div>
+																			<?php if (defined("B2BLOGGED")): ?>
+																				<?=$this->price_netbr?> <?=Helper::cashFormat($vegosszeg)?> Ft
+																				<div class="b2b-br-price">bruttó <span class="cash ar"><?=Helper::cashFormat($vegosszeg*AFA)?></span> Ft</div>
+																			<?php else: ?>
+																				<?=$this->price_netbr?> <span class="ar"><?=Helper::cashFormat($vegosszeg)?></span> Ft
 																			<?php endif; ?>
 																		</span>
                                     <input type="hidden" name="kedvezmeny" value="<?=$this->user[kedvezmeny]?>" />

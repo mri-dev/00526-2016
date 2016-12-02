@@ -3345,9 +3345,8 @@ input + .text-hint {
 }
 
 .b2b-br-price {
-  font-size: 13px;
-  margin: 0 5px;
-  color: #9c9c9c;
+  font-size: 16px;
+  color: #5aaf0e;
   font-weight: 400;
 }
 .b2b-br-price .cash {
