@@ -1917,7 +1917,7 @@ class Shop
 						'$mid',
 						'$atvetel',
 						'$fizetes',
-						'$kedvezmeny',
+						'0',
 						'$szallitasi_koltseg',
 						'".json_encode($szamlazasi_keys,JSON_UNESCAPED_UNICODE)."',
 						'".json_encode($szallitasi_keys,JSON_UNESCAPED_UNICODE)."',
